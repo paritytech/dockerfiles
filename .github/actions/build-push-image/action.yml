@@ -21,8 +21,9 @@ runs:
   using: "composite"
   steps:
 
-    - name: set vars
+    - name: set vars    
       id: vars
+      shell: bash
       run: |
         echo "BUILD_DATE='$(date +%Y%m%d)'" >> $GITHUB_OUTPUT  
 
@@ -52,9 +53,10 @@ runs:
         image: ${{ steps.build-image.outputs.image }}
         tags: ${{ steps.build-image.outputs.tags }}
         registry: ${{ inputs.registry }}
-        username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
+        username: "user"
+        password: "password"
 
     - name: Print image url
+      shell: bash
       if: ${{ inputs.push }}
       run: echo "Image pushed to ${{ steps.push-image.outputs.registry-paths }}"
