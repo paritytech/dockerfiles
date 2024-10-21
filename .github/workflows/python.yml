@@ -36,7 +36,7 @@ jobs:
         image-tags: >
           staging
         build-args: |
-          VAULT_VERSION='${{ env.VAULT_VERSION }}'
+          VAULT_VERSION=${{ env.VAULT_VERSION }}
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -48,4 +48,4 @@ jobs:
           ${{ env.PYTHON_VERSION }}
           latest
         build-args: |
-          VAULT_VERSION='${{ env.VAULT_VERSION }}'
+          VAULT_VERSION=${{ env.VAULT_VERSION }}

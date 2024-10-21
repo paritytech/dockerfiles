@@ -36,8 +36,8 @@ jobs:
         image-tags: >
           staging
         build-args: |
-          PACKER_VERSION="${{ env.PACKER_VERSION }}"
-          VAULT_VERSION="${{ env.VAULT_VERSION }}"
+          PACKER_VERSION=${{ env.PACKER_VERSION }}
+          VAULT_VERSION=${{ env.VAULT_VERSION }}
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -49,5 +49,5 @@ jobs:
           ${{ steps.vars.outputs.IMAGE_DATE_TAG }}
           latest
         build-args: |
-          PACKER_VERSION="${{ env.PACKER_VERSION }}"
-          VAULT_VERSION="${{ env.VAULT_VERSION }}"
+          PACKER_VERSION=${{ env.PACKER_VERSION }}
+          VAULT_VERSION=${{ env.VAULT_VERSION }}

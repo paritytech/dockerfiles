@@ -42,12 +42,12 @@ jobs:
         image-tags: >
           staging
         build-args: |
-          RUST_STABLE_VERSION='${{ env.RUST_STABLE_VERSION }}'
-          RUST_NIGHTLY_VERSION='${{ env.RUST_NIGHTLY_VERSION }}'
-          FORKLIFT_VERSION='${{ env.FORKLIFT_VERSION }}'
-          CODECOV_UPLOADER_VERSION='${{ env.CODECOV_UPLOADER_VERSION }}'
-          CODECOV_CLI_VERSION='${{ env.CODECOV_CLI_VERSION }}'
-          DISTRO_CODENAME='${{ env.DISTRO_CODENAME }}'
+          RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
+          RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
+          FORKLIFT_VERSION=${{ env.FORKLIFT_VERSION }}
+          CODECOV_UPLOADER_VERSION=${{ env.CODECOV_UPLOADER_VERSION }}
+          CODECOV_CLI_VERSION=${{ env.CODECOV_CLI_VERSION }}
+          DISTRO_CODENAME=${{ env.DISTRO_CODENAME }}
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -62,9 +62,9 @@ jobs:
           ${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
           latest
         build-args: |
-          RUST_STABLE_VERSION='${{ env.RUST_STABLE_VERSION }}'
-          RUST_NIGHTLY_VERSION='${{ env.RUST_NIGHTLY_VERSION }}'
-          FORKLIFT_VERSION='${{ env.FORKLIFT_VERSION }}'
-          CODECOV_UPLOADER_VERSION='${{ env.CODECOV_UPLOADER_VERSION }}'
-          CODECOV_CLI_VERSION='${{ env.CODECOV_CLI_VERSION }}'
-          DISTRO_CODENAME='${{ env.DISTRO_CODENAME }}'
+          RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
+          RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
+          FORKLIFT_VERSION=${{ env.FORKLIFT_VERSION }}
+          CODECOV_UPLOADER_VERSION=${{ env.CODECOV_UPLOADER_VERSION }}
+          CODECOV_CLI_VERSION=${{ env.CODECOV_CLI_VERSION }}
+          DISTRO_CODENAME=${{ env.DISTRO_CODENAME }}
