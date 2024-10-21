@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
 
+    - uses: actions/checkout@v4      
+
     - name: set vars
       id: vars
       run: |
@@ -24,7 +26,7 @@ jobs:
 
     - name: build and push staging
       if: ${{ github.event_name == 'pull_request' }}
-      uses: ./.github/actions/build-push-image      
+      uses: ./.github/actions/build-push-image
       with:
         registry: ${{ env.REGISTRY_PATH }}
         image-name: ${{ env.IMAGE_NAME }}
@@ -33,7 +35,7 @@ jobs:
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
-      uses: ./.github/actions/build-push-image      
+      uses: ./.github/actions/build-push-image
       with:
         registry: ${{ env.REGISTRY_PATH }}
         image-name: ${{ env.IMAGE_NAME }}
