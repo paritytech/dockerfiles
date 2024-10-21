@@ -1,0 +1,53 @@
+name: terraform
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]    
+    paths:
+      - 'terraform/*'
+      - '.github/workflows/terraform.yml'
+  workflow_dispatch:
+
+env: 
+  REGISTRY_PATH: 'docker.io/paritytech'
+  IMAGE_NAME: 'terraform'
+  TERRAFORM_VERSION: $TERRAFORM_VERSION
+  VAULT_VERSION: $VAULT_VERSION
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps: 
+
+    - uses: actions/checkout@v4
+
+    - name: set vars
+      id: vars
+      run: |
+        export COMMIT_SHA=${{ github.sha }}
+        echo "IMAGE_DATE_TAG='${COMMIT_SHA:0:8}-$(date +%Y%m%d)'" >> $GITHUB_OUTPUT  
+
+    - name: build and push staging
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: ./.github/actions/build-push-image      
+      with:
+        registry: ${{ env.REGISTRY_PATH }}
+        image-name: ${{ env.IMAGE_NAME }}
+        image-tags: >
+          staging
+        build-args: |
+          TERRAFORM_VERSION="${{ env.TERRAFORM_VERSION }}
+          VAULT_VERSION="${{ env.VAULT_VERSION }}
+
+    - name: build and push
+      if: ${{ github.event_name == 'workflow_dispatch' }}
+      uses: ./.github/actions/build-push-image      
+      with:
+        registry: ${{ env.REGISTRY_PATH }}
+        image-name: ${{ env.IMAGE_NAME }}
+        image-tags: >
+          ${{ env.TERRAFORM_VERSION }}
+          latest
+        build-args: |
+          TERRAFORM_VERSION="${{ env.TERRAFORM_VERSION }}"
+          VAULT_VERSION="${{ env.VAULT_VERSION }}"
