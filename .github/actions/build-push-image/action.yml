@@ -1,0 +1,62 @@
+name: 'build and push image'
+inputs:
+  registry:
+    required: true
+  image-name:
+    required: true    
+  image-tags:
+    required: true    
+  build-args:
+    required: false
+    default: ""
+  build-opts:
+    required: false
+    default: ""
+
+  push:
+    required: false
+    default: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - uses: actions/checkout@v4
+
+    - name: set vars
+      id: vars
+      run: |
+        echo "BUILD_DATE='$(date +%Y%m%d)'" >> $GITHUB_OUTPUT  
+
+    - name: buildah build
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: ${{ inputs.registry }}/${{ inputs.image-name }}
+        tags: ${{ inputs.image-tags }}
+        context: ./
+        containerfiles: |
+          ./${{ inputs.image-name }}/Dockerfile
+        build-args: |
+          VCS_REF="${{ github.sha }}"
+          BUILD_DATE="${{ steps.vars.outputs.BUILD_DATE }}"
+          REGISTRY_PATH="${{ inputs.registry }}"
+          ${{ inputs.build-args }}
+        extra-args: |
+          --format=docker
+          ${{ inputs.build-opts }}
+
+    - name: push
+      id: push-image
+      if: ${{ inputs.push }}
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image.outputs.image }}
+        tags: ${{ steps.build-image.outputs.tags }}
+        registry: ${{ inputs.registry }}
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Print image url
+      if: ${{ inputs.push }}
+      run: echo "Image pushed to ${{ steps.push-image.outputs.registry-paths }}"
