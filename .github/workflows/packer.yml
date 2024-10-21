@@ -11,8 +11,8 @@ on:
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
   IMAGE_NAME: 'packer'
-  PACKER_VERSION: "$PACKER_VERSION"
-  VAULT_VERSION: "$VAULT_VERSION"
+  PACKER_VERSION: "1.8.7"
+  VAULT_VERSION: "1.17.3"
 
 jobs:
   Build:

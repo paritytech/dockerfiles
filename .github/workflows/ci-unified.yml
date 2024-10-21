@@ -9,14 +9,14 @@ on:
   workflow_dispatch:
 
 env: 
-  REGISTRY_PATH: 'docker.io/paritytech'
-  IMAGE_NAME: 'ci-unified'
-  RUST_STABLE_VERSION: 1.81.0
-  RUST_NIGHTLY_VERSION: 2024-09-11
-  FORKLIFT_VERSION: 0.13.2
-  CODECOV_UPLOADER_VERSION: v0.7.3
-  CODECOV_CLI_VERSION: v0.6.0
-  DISTRO_CODENAME: bullseye
+  REGISTRY_PATH: "docker.io/paritytech"
+  IMAGE_NAME: "ci-unified"
+  RUST_STABLE_VERSION: "1.81.0"
+  RUST_NIGHTLY_VERSION: "2024-09-11"
+  FORKLIFT_VERSION: "0.13.2"
+  CODECOV_UPLOADER_VERSION: "v0.7.3"
+  CODECOV_CLI_VERSION: "v0.6.0"
+  DISTRO_CODENAME: "bullseye"
 
 
 jobs:

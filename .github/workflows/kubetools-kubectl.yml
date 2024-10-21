@@ -11,7 +11,7 @@ on:
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
   IMAGE_NAME: 'kubetools-kubectl'
-  KUBE_VERSION: '$KUBE_VERSION'
+  KUBE_VERSION: '1.26.6'
 
 jobs:
   Build:

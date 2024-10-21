@@ -11,8 +11,8 @@ on:
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
   IMAGE_NAME: 'sops'
-  SOPS_VERSION: "$SOPS_VERSION"
-  VAULT_VERSION: "$VAULT_VERSION"
+  SOPS_VERSION: "3.9.0"
+  VAULT_VERSION: "1.17.3"
 
 jobs:
   Build:
