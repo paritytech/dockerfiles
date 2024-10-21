@@ -1,4 +1,4 @@
-name: Mixed inputs
+name: debian11
 
 on:
   pull_request:
