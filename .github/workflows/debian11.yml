@@ -2,7 +2,7 @@ name: debian11
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review, labeled]    
+    types: [opened, synchronize, reopened, ready_for_review]    
     paths:
       - 'dockerfiles/debian11/*'
   workflow_dispatch:
