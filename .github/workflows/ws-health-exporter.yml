@@ -16,7 +16,7 @@ env:
 jobs:
   Build:
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'pull_request' && 'staging' || 'main' }}
+    environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
     steps: 
 
     - uses: actions/checkout@v4

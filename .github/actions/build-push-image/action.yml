@@ -55,8 +55,9 @@ runs:
       if: ${{ inputs.push }}
       uses: redhat-actions/push-to-registry@v2
       with:
-        image: ${{ steps.build-image.outputs.image }}
+        image: ${{ inputs.image-name }}
         tags: ${{ steps.build-image.outputs.tags }}
+        registry: ${{ inputs.registry }}
         username: ${{ inputs.registry-user }}
         password: ${{ inputs.registry-password }}
 
