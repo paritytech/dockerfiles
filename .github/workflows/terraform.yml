@@ -10,6 +10,7 @@ on:
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
+  REGISTRY_PATH_PR: "docker.io/paritypr"
   IMAGE_NAME: 'terraform'
   TERRAFORM_VERSION: "1.5.6"
   VAULT_VERSION: "1.17.3"
@@ -32,7 +33,9 @@ jobs:
       if: ${{ github.event_name == 'pull_request' }}
       uses: ./.github/actions/build-push-image      
       with:
-        registry: ${{ env.REGISTRY_PATH }}
+        registry: ${{ env.REGISTRY_PATH_PR }}
+        registry-user: ${{ secrets.REGISTRY_USER }}
+        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         image-name: ${{ env.IMAGE_NAME }}
         image-tags: >
           staging
@@ -45,6 +48,8 @@ jobs:
       uses: ./.github/actions/build-push-image      
       with:
         registry: ${{ env.REGISTRY_PATH }}
+        registry-user: ${{ secrets.REGISTRY_USER }}
+        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         image-name: ${{ env.IMAGE_NAME }}
         image-tags: >
           ${{ env.TERRAFORM_VERSION }}
