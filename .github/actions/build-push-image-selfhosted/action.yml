@@ -7,6 +7,8 @@ inputs:
   registry-password:
     required: false
 
+  image-name:
+    required: true    
   image-tags:
     required: true    
   build-args:
@@ -37,7 +39,7 @@ runs:
       uses: docker/build-push-action@v6
       with:
         context: ./
-        file: ${{ inputs.dockerfile }}
+        file: ./${{ inputs.image-name }}/Dockerfile
         tags: ${{ inputs.image-tags }}
         push: true
         build-args: |

@@ -40,6 +40,7 @@ jobs:
       uses: ./.github/actions/build-push-image-selfhosted
       with:
         registry: ${{ env.REGISTRY_PATH_PR }}
+        image-name: ${{ env.IMAGE_NAME }}
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         image-tags: >
@@ -57,6 +58,7 @@ jobs:
       uses: ./.github/actions/build-push-image-selfhosted
       with:
         registry: ${{ env.REGISTRY_PATH }}
+        image-name: ${{ env.IMAGE_NAME }}
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         image-tags: >
