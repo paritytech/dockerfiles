@@ -1,0 +1,52 @@
+name: 'build and push image'
+inputs:
+  registry:
+    required: true
+  registry-user:
+    required: false
+  registry-password:
+    required: false
+
+  image-tags:
+    required: true    
+  build-args:
+    required: false
+    default: ""
+
+  push:
+    required: false
+    default: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: set vars
+      id: vars
+      shell: bash
+      run: |
+        echo "BUILD_DATE='$(date +%Y%m%d)'" >> $GITHUB_OUTPUT  
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ inputs.registry-user }}
+        password: ${{ inputs.registry-password }}
+
+    - name: docker build
+      uses: docker/build-push-action@v6
+      with:
+        context: ./
+        file: ${{ inputs.dockerfile }}
+        tags: ${{ inputs.image-tags }}
+        push: true
+        build-args: |
+          VCS_REF="${{ github.sha }}"
+          BUILD_DATE="${{ steps.vars.outputs.BUILD_DATE }}"
+          REGISTRY_PATH="${{ inputs.registry }}"
+          ${{ inputs.build-args }}
+
+    - name: Print image url
+      shell: bash
+      if: ${{ inputs.push }}
+      run: echo "Image pushed to ${{ steps.build-image.outputs.imageid }}"

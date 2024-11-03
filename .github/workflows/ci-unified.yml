@@ -22,7 +22,7 @@ env:
 
 jobs:
   Build:
-    runs-on: ubuntu-latest
+    runs-on: parity-default
     environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
     steps: 
 
@@ -37,14 +37,13 @@ jobs:
 
     - name: build and push staging
       if: ${{ github.event_name == 'pull_request' }}
-      uses: ./.github/actions/build-push-image
+      uses: ./.github/actions/build-push-image-selfhosted
       with:
         registry: ${{ env.REGISTRY_PATH_PR }}
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-        image-name: ${{ env.IMAGE_NAME }}
         image-tags: >
-          staging
+          ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging
         build-args: |
           RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
           RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
@@ -55,18 +54,17 @@ jobs:
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
-      uses: ./.github/actions/build-push-image      
+      uses: ./.github/actions/build-push-image-selfhosted
       with:
         registry: ${{ env.REGISTRY_PATH }}
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-        image-name: ${{ env.IMAGE_NAME }}
         image-tags: >
-          ${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}"
-          ${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
-          ${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}"
-          ${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
-          latest
+          ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}"
+          ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
+          ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}"
+          ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
+          ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:latest
         build-args: |
           RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
           RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
