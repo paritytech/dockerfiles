@@ -1,0 +1,51 @@
+name: parity-keyring
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]    
+    paths:
+      - 'parity-keyring/*'
+      - '.github/workflows/parity-keyring.yml'
+  workflow_dispatch:
+
+env: 
+  REGISTRY_PATH: 'docker.io/paritytech'
+  REGISTRY_PATH_PR: "docker.io/paritypr"
+  IMAGE_NAME: 'parity-keyring'
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
+    steps: 
+
+    - uses: actions/checkout@v4      
+
+    - name: set vars
+      id: vars
+      run: |
+        export COMMIT_SHA=${{ github.sha }}
+        echo "IMAGE_DATE_TAG=${COMMIT_SHA:0:8}-$(date +%Y%m%d)" >> $GITHUB_OUTPUT  
+
+    - name: build and push staging
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: ./.github/actions/build-push-image
+      with:
+        registry: ${{ env.REGISTRY_PATH_PR }}
+        registry-user: ${{ secrets.REGISTRY_USER }}
+        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        image-name: ${{ env.IMAGE_NAME }}
+        image-tags: >
+          staging
+
+    - name: build and push
+      if: ${{ github.event_name == 'workflow_dispatch' }}
+      uses: ./.github/actions/build-push-image
+      with:
+        registry: ${{ env.REGISTRY_PATH }}
+        registry-user: ${{ secrets.REGISTRY_USER }}
+        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        image-name: ${{ env.IMAGE_NAME }}
+        image-tags: >
+          ${{ steps.vars.outputs.IMAGE_DATE_TAG }}
+          latest
