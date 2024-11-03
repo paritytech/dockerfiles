@@ -1,17 +1,19 @@
-name: debian11
+name: packer
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]    
     paths:
-      - 'debian11/*'
-      - '.github/workflows/debian11.yml'
+      - 'packer/*'
+      - '.github/workflows/packer.yml'
   workflow_dispatch:
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
   REGISTRY_PATH_PR: "docker.io/paritypr"
-  IMAGE_NAME: 'debian11'
+  IMAGE_NAME: 'packer'
+  PACKER_VERSION: "1.8.7"
+  VAULT_VERSION: "1.17.3"
 
 jobs:
   Build:
@@ -19,17 +21,17 @@ jobs:
     environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
     steps: 
 
-    - uses: actions/checkout@v4      
+    - uses: actions/checkout@v4
 
     - name: set vars
       id: vars
       run: |
         export COMMIT_SHA=${{ github.sha }}
-        echo "IMAGE_DATE_TAG=${COMMIT_SHA:0:8}-$(date +%Y%m%d)" >> $GITHUB_OUTPUT  
+        echo "IMAGE_DATE_TAG='${COMMIT_SHA:0:8}-$(date +%Y%m%d)'" >> $GITHUB_OUTPUT  
 
     - name: build and push staging
       if: ${{ github.event_name == 'pull_request' }}
-      uses: ./.github/actions/build-push-image
+      uses: ./.github/actions/build-push-image      
       with:
         registry: ${{ env.REGISTRY_PATH_PR }}
         registry-user: ${{ secrets.REGISTRY_USER }}
@@ -37,10 +39,13 @@ jobs:
         image-name: ${{ env.IMAGE_NAME }}
         image-tags: >
           staging
+        build-args: |
+          PACKER_VERSION=${{ env.PACKER_VERSION }}
+          VAULT_VERSION=${{ env.VAULT_VERSION }}
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
-      uses: ./.github/actions/build-push-image
+      uses: ./.github/actions/build-push-image      
       with:
         registry: ${{ env.REGISTRY_PATH }}
         registry-user: ${{ secrets.REGISTRY_USER }}
@@ -49,3 +54,6 @@ jobs:
         image-tags: >
           ${{ steps.vars.outputs.IMAGE_DATE_TAG }}
           latest
+        build-args: |
+          PACKER_VERSION=${{ env.PACKER_VERSION }}
+          VAULT_VERSION=${{ env.VAULT_VERSION }}

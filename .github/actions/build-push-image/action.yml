@@ -2,6 +2,11 @@ name: 'build and push image'
 inputs:
   registry:
     required: true
+  registry-user:
+    required: false
+  registry-password:
+    required: false
+
   image-name:
     required: true    
   image-tags:
@@ -45,16 +50,21 @@ runs:
           --format=docker
           ${{ inputs.build-opts }}
 
+    - name: Log in
+      uses: redhat-actions/podman-login@v1
+      with:
+        username: ${{ inputs.registry-user }}
+        password: ${{ inputs.registry-password }}      
+        registry: "docker.io"
+
     - name: push
       id: push-image
       if: ${{ inputs.push }}
       uses: redhat-actions/push-to-registry@v2
       with:
-        image: ${{ steps.build-image.outputs.image }}
+        image: ${{ inputs.image-name }}
         tags: ${{ steps.build-image.outputs.tags }}
         registry: ${{ inputs.registry }}
-        username: "user"
-        password: "password"
 
     - name: Print image url
       shell: bash

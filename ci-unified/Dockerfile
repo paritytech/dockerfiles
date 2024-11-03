@@ -179,10 +179,10 @@ RUN cargo install subkey
 
 # contracts ci
 # Download the latest `substrate-contracts-node` binary
-RUN	curl -L -o substrate-contracts-node.zip 'https://gitlab.parity.io/parity/mirrors/substrate-contracts-node/-/jobs/artifacts/main/download?job=build-linux' && \
-    unzip substrate-contracts-node.zip && \
+RUN	curl -L -o substrate-contracts-node-linux.tar.gz 'https://github.com/paritytech/substrate-contracts-node/releases/latest/download/substrate-contracts-node-linux.tar.gz' && \
+    tar -xvzf substrate-contracts-node-linux.tar.gz && \
     mv artifacts/substrate-contracts-node-linux/substrate-contracts-node /usr/local/cargo/bin/substrate-contracts-node && \
-    rm -r artifacts substrate-contracts-node.zip && \
+    rm -r artifacts substrate-contracts-node-linux.tar.gz && \
     chmod +x /usr/local/cargo/bin/substrate-contracts-node
 
 # contracts ci
