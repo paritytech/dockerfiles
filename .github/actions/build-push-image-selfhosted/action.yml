@@ -15,6 +15,10 @@ inputs:
     required: false
     default: ""
 
+  context:
+    required: false
+    default: "./"
+
   push:
     required: false
     default: true
@@ -38,7 +42,7 @@ runs:
     - name: docker build
       uses: docker/build-push-action@v6
       with:
-        context: ./
+        context: ${{ inputs.context }}
         file: ./${{ inputs.image-name }}/Dockerfile
         tags: ${{ inputs.image-tags }}
         push: true
