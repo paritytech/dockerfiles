@@ -28,7 +28,10 @@ jobs:
         echo "IMAGE_DATE_TAG=${COMMIT_SHA:0:8}-$(date +%Y%m%d)" >> $GITHUB_OUTPUT  
 
     - name: clone releng-scripts
-      run: git clone https://github.com/paritytech/releng-scripts
+      run: >
+        mkdir -p artifacts
+        cd artifacts
+        git clone https://github.com/paritytech/releng-scripts
 
     - name: build and push staging
       if: ${{ github.event_name == 'pull_request' }}
@@ -46,7 +49,7 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' }}
       uses: ./.github/actions/build-push-image
       with:
-        context: ./releng-scripts
+        context: ./artifacts/releng-scripts
         registry: ${{ env.REGISTRY_PATH }}
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
