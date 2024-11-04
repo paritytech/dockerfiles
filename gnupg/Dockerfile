@@ -6,8 +6,8 @@ FROM docker.io/library/ubuntu:latest
 ARG GPG_KEYID=9D4B2B6EB8F97156D19669A9FF0812D491B96798
 ARG VCS_REF=master
 ARG BUILD_DATE=""
-ARG UID=1000
-ARG GID=1000
+ARG UID=1001
+ARG GID=1001
 
 # metadata
 LABEL summary="Base image for GnuPG operations" \
