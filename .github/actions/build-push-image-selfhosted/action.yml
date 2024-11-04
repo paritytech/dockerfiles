@@ -15,6 +15,10 @@ inputs:
     required: false
     default: ""
 
+  context:
+    required: false
+    default: "./"
+
   push:
     required: false
     default: true
@@ -38,14 +42,14 @@ runs:
     - name: docker build
       uses: docker/build-push-action@v6
       with:
-        context: ./
+        context: ${{ inputs.context }}
         file: ./${{ inputs.image-name }}/Dockerfile
         tags: ${{ inputs.image-tags }}
         push: true
         build-args: |
-          VCS_REF="${{ github.sha }}"
-          BUILD_DATE="${{ steps.vars.outputs.BUILD_DATE }}"
-          REGISTRY_PATH="${{ inputs.registry }}"
+          VCS_REF=${{ github.sha }}
+          BUILD_DATE=${{ steps.vars.outputs.BUILD_DATE }}
+          REGISTRY_PATH=${{ inputs.registry }}
           ${{ inputs.build-args }}
 
     - name: Print image url

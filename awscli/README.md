@@ -1,0 +1,1 @@
+# Awscli utility Docker image

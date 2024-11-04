@@ -1,17 +1,17 @@
-name: debian11
+name: releng-scripts
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]    
     paths:
-      - 'debian11/*'
-      - '.github/workflows/debian11.yml'
+      - 'releng-scripts/*'
+      - '.github/workflows/releng-scripts.yml'
   workflow_dispatch:
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
   REGISTRY_PATH_PR: 'docker.io/paritypr'
-  IMAGE_NAME: 'debian11'
+  IMAGE_NAME: 'releng-scripts'
 
 jobs:
   Build:
@@ -27,10 +27,17 @@ jobs:
         export COMMIT_SHA=${{ github.sha }}
         echo "IMAGE_DATE_TAG=${COMMIT_SHA:0:8}-$(date +%Y%m%d)" >> $GITHUB_OUTPUT  
 
+    - name: clone releng-scripts
+      run: >
+        mkdir -p artifacts
+        cd artifacts
+        git clone https://github.com/paritytech/releng-scripts
+
     - name: build and push staging
       if: ${{ github.event_name == 'pull_request' }}
       uses: ./.github/actions/build-push-image
       with:
+        context: ./releng-scripts
         registry: ${{ env.REGISTRY_PATH_PR }}
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
@@ -42,6 +49,7 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' }}
       uses: ./.github/actions/build-push-image
       with:
+        context: ./artifacts/releng-scripts
         registry: ${{ env.REGISTRY_PATH }}
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}

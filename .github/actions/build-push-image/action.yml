@@ -7,6 +7,10 @@ inputs:
   registry-password:
     required: false
 
+  context:
+    required: false
+    default: "./"
+
   image-name:
     required: true    
   image-tags:
@@ -38,13 +42,13 @@ runs:
       with:
         image: ${{ inputs.registry }}/${{ inputs.image-name }}
         tags: ${{ inputs.image-tags }}
-        context: ./
+        context: ${{ inputs.context }}
         containerfiles: |
           ./${{ inputs.image-name }}/Dockerfile
         build-args: |
-          VCS_REF="${{ github.sha }}"
-          BUILD_DATE="${{ steps.vars.outputs.BUILD_DATE }}"
-          REGISTRY_PATH="${{ inputs.registry }}"
+          VCS_REF=${{ github.sha }}
+          BUILD_DATE=${{ steps.vars.outputs.BUILD_DATE }}
+          REGISTRY_PATH=${{ inputs.registry }}
           ${{ inputs.build-args }}
         extra-args: |
           --format=docker

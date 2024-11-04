@@ -1,17 +1,17 @@
-name: debian11
+name: xbuilder-aarch64-unknown-linux-gnu
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]    
     paths:
-      - 'debian11/*'
-      - '.github/workflows/debian11.yml'
+      - 'xbuilder-aarch64-unknown-linux-gnu/*'
+      - '.github/workflows/xbuilder-aarch64-unknown-linux-gnu.yml'
   workflow_dispatch:
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
   REGISTRY_PATH_PR: 'docker.io/paritypr'
-  IMAGE_NAME: 'debian11'
+  IMAGE_NAME: 'xbuilder-aarch64-unknown-linux-gnu'
 
 jobs:
   Build:

@@ -1,17 +1,17 @@
-name: debian11
+name: deb
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]    
     paths:
-      - 'debian11/*'
-      - '.github/workflows/debian11.yml'
+      - 'deb/*'
+      - '.github/workflows/deb.yml'
   workflow_dispatch:
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
   REGISTRY_PATH_PR: 'docker.io/paritypr'
-  IMAGE_NAME: 'debian11'
+  IMAGE_NAME: 'deb'
 
 jobs:
   Build:

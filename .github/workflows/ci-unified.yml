@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
 
 env: 
-  REGISTRY_PATH: "docker.io/paritytech"
-  REGISTRY_PATH_PR: "docker.io/paritypr"
+  REGISTRY_PATH: 'docker.io/paritytech'
+  REGISTRY_PATH_PR: 'docker.io/paritypr'
   IMAGE_NAME: "ci-unified"
   RUST_STABLE_VERSION: "1.81.0"
   RUST_NIGHTLY_VERSION: "2024-09-11"

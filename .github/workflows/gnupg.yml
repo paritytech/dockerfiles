@@ -1,17 +1,17 @@
-name: debian11
+name: gnupg
 
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]    
     paths:
-      - 'debian11/*'
-      - '.github/workflows/debian11.yml'
+      - 'gnupg/*'
+      - '.github/workflows/gnupg.yml'
   workflow_dispatch:
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
   REGISTRY_PATH_PR: 'docker.io/paritypr'
-  IMAGE_NAME: 'debian11'
+  IMAGE_NAME: 'gnupg'
 
 jobs:
   Build:
@@ -37,6 +37,7 @@ jobs:
         image-name: ${{ env.IMAGE_NAME }}
         image-tags: >
           staging
+          latest
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
