@@ -10,7 +10,7 @@ on:
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
-  REGISTRY_PATH_PR: "docker.io/paritypr"
+  REGISTRY_PATH_PR: 'docker.io/paritypr'
   IMAGE_NAME: 'terraform'
   TERRAFORM_VERSION: "1.5.6"
   VAULT_VERSION: "1.17.3"

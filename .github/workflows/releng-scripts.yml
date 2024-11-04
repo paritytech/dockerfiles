@@ -10,7 +10,7 @@ on:
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
-  REGISTRY_PATH_PR: "docker.io/paritypr"
+  REGISTRY_PATH_PR: 'docker.io/paritypr'
   IMAGE_NAME: 'releng-scripts'
 
 jobs:
