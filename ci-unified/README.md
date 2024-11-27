@@ -9,8 +9,8 @@ This image is used for running CI jobs for Parity repositories. It could also wo
 
 The actual image's revision is based on Debian 11 (aka `bullseye`) and contains the following:
 
-* Rust stable 1.77.0
-* Rust nightly 2024-04-10
+* Rust stable 1.81.0
+* Rust nightly 2024-11-19
 * LLVM 15
 * Python 3.9.2
 * Ruby 2.7.4
