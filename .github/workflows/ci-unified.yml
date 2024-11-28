@@ -46,7 +46,7 @@ jobs:
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           image-tags: |
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging
-            ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging-${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
+            ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging-${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
           build-args: |
             RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
             RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
@@ -63,11 +63,11 @@ jobs:
           image-name: ${{ env.IMAGE_NAME }}
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          image-tags: >
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}"
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}"
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
+          image-tags: |
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:latest
           build-args: |
             RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
