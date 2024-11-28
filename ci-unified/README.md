@@ -34,14 +34,7 @@ So when we release a new image, the image is tagged with these 4 tags based on t
 
 #### Currently available tag combination flavors (i.e. pairs)
 
-* `bullseye-1.77.0-2024-04-10`
-* `bullseye-1.75.0-2024-01-22`
-* `bullseye-1.74.0-2023-11-01`
-* `bullseye-1.73.0-2023-11-01`
-* `bullseye-1.73.0-2023-05-23`
-* `bullseye-1.71.0-2023-05-23`
-* `bullseye-1.70.0-2023-05-23`
-* `bullseye-1.69.0-2023-03-21`
+You can find available tags here: https://hub.docker.com/r/paritytech/ci-unified/tags
 
 Note that we keep the old pairs for a while, but eventually they will be removed. So please, try to use the actual available pair.
 

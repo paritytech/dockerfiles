@@ -124,7 +124,7 @@ RUN cargo install mdbook-graphviz --locked
 RUN cargo install cargo-spellcheck cargo-nextest --locked
 
 # generic ci | diener 0.4.6 | NOTE: before upgrading please test new version with companion build, example can be found here: https://github.com/paritytech/substrate/pull/12710
-RUN cargo install diener --version 0.4.6
+# RUN cargo install diener --version 0.4.6
 
 # generic ci | wasm-bindgen-cli version should match the one pinned in substrate
 RUN cargo install wasm-bindgen-cli --version 0.2.73
