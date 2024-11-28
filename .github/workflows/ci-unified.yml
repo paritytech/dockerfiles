@@ -35,6 +35,8 @@ jobs:
           DATESTAMP=$(git log -1 --pretty=format:"%ad" --date=format:"%Y%m%d%H%M" -- dockerfiles/${IMAGE_NAME}/*)
           echo "DATESTAMP=${DATESTAMP}" >> $GITHUB_OUTPUT
           echo $IMAGE_DATE_TAG $DATESTAMP
+          git log -1 --pretty=format:"%ad" --date=format:"%Y%m%d%H%M" -- dockerfiles/${IMAGE_NAME}/*
+          exit 1
 
       - name: build and push staging
         if: ${{ github.event_name == 'pull_request' }}
