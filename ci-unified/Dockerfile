@@ -100,7 +100,7 @@ RUN ln -s "/usr/local/rustup/toolchains/${RUST_STABLE_VERSION}-x86_64-unknown-li
 # generic ci | install additional rustup components for the ci tests
 RUN rustup component add rust-src rustfmt clippy
 
-ARG RUST_NIGHTLY_VERSION="2024-09-11"
+ARG RUST_NIGHTLY_VERSION="2024-11-19"
 
 # generic ci | install specific rust nightly, default is stable, use minimum components
 RUN rustup toolchain install "nightly-${RUST_NIGHTLY_VERSION}" --profile minimal --component rustfmt rust-analyzer
