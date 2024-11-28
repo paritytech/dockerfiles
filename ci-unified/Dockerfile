@@ -100,7 +100,7 @@ RUN ln -s "/usr/local/rustup/toolchains/${RUST_STABLE_VERSION}-x86_64-unknown-li
 # generic ci | install additional rustup components for the ci tests
 RUN rustup component add rust-src rustfmt clippy
 
-ARG RUST_NIGHTLY_VERSION="2024-09-11"
+ARG RUST_NIGHTLY_VERSION="2024-11-19"
 
 # generic ci | install specific rust nightly, default is stable, use minimum components
 RUN rustup toolchain install "nightly-${RUST_NIGHTLY_VERSION}" --profile minimal --component rustfmt rust-analyzer
@@ -124,7 +124,7 @@ RUN cargo install mdbook-graphviz --locked
 RUN cargo install cargo-spellcheck cargo-nextest --locked
 
 # generic ci | diener 0.4.6 | NOTE: before upgrading please test new version with companion build, example can be found here: https://github.com/paritytech/substrate/pull/12710
-RUN cargo install diener --version 0.4.6
+# RUN cargo install diener --version 0.4.6
 
 # generic ci | wasm-bindgen-cli version should match the one pinned in substrate
 RUN cargo install wasm-bindgen-cli --version 0.2.73
