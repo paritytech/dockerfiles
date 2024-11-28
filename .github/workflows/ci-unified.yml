@@ -30,8 +30,11 @@ jobs:
         id: vars
         run: |
           export COMMIT_SHA=${{ github.sha }}
-          echo "IMAGE_DATE_TAG='${COMMIT_SHA:0:8}-$(date +%Y%m%d)'" >> $GITHUB_OUTPUT
-          echo 'DATESTAMP=$(git log -1 --pretty=format:%ad --date=format:%Y%m%d%H%M -- dockerfiles/$IMAGE_NAME/*)' >> $GITHUB_OUTPUT
+          IMAGE_DATE_TAG="${COMMIT_SHA:0:8}-$(date +%Y%m%d)"
+          echo "IMAGE_DATE_TAG=${IMAGE_DATE_TAG}" >> $GITHUB_OUTPUT
+          DATESTAMP=$(date +%Y%m%d%H%M)
+          echo "DATESTAMP=${DATESTAMP}" >> $GITHUB_OUTPUT
+          echo $IMAGE_DATE_TAG $DATESTAMP
 
       - name: build and push staging
         if: ${{ github.event_name == 'pull_request' }}
@@ -41,8 +44,9 @@ jobs:
           image-name: ${{ env.IMAGE_NAME }}
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          image-tags: >
+          image-tags: |
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging
+            ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging-${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
           build-args: |
             RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
             RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
@@ -59,11 +63,11 @@ jobs:
           image-name: ${{ env.IMAGE_NAME }}
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          image-tags: >
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}"
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}"
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
+          image-tags: |
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:latest
           build-args: |
             RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
