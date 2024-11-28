@@ -42,7 +42,7 @@ jobs:
           image-name: ${{ env.IMAGE_NAME }}
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          image-tags: >
+          image-tags: |
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging-${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}"
           build-args: |
