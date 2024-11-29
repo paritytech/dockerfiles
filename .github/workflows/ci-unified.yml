@@ -67,11 +67,11 @@ jobs:
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           image-tags: |
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:latest
+            docker.io/paritytech/ci-unified:bullseye-1.81.0 \
+            docker.io/paritytech/ci-unified:bullseye-1.81.0-v202411281558
+            docker.io/paritytech/ci-unified:bullseye-1.81.0-2024-11-19
+            docker.io/paritytech/ci-unified:bullseye-1.81.0-2024-11-19-v202411281558
+            docker.io/paritytech/ci-unified:latest
           build-args: |
             RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
             RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
