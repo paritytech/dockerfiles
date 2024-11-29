@@ -45,7 +45,7 @@ runs:
       id: build-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: ${{ inputs.registry }}/${{ inputs.image-name }}
+        # image: ${{ inputs.registry }}/${{ inputs.image-name }}
         tags: ${{ inputs.image-tags }}
         context: ${{ inputs.context }}
         containerfiles: |
