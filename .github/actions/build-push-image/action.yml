@@ -1,4 +1,4 @@
-name: 'build and push image'
+name: "build and push image"
 inputs:
   registry:
     required: true
@@ -12,9 +12,9 @@ inputs:
     default: "./"
 
   image-name:
-    required: true    
+    required: true
   image-tags:
-    required: true    
+    required: true
   build-args:
     required: false
     default: ""
@@ -29,12 +29,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-
-    - name: set vars    
+    - name: set vars
       id: vars
       shell: bash
       run: |
-        echo "BUILD_DATE='$(date +%Y%m%d)'" >> $GITHUB_OUTPUT  
+        echo "BUILD_DATE='$(date +%Y%m%d)'" >> $GITHUB_OUTPUT
 
     - name: buildah build
       id: build-image
@@ -58,7 +57,7 @@ runs:
       uses: redhat-actions/podman-login@v1
       with:
         username: ${{ inputs.registry-user }}
-        password: ${{ inputs.registry-password }}      
+        password: ${{ inputs.registry-password }}
         registry: "docker.io"
 
     - name: push

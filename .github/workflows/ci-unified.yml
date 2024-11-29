@@ -36,29 +36,32 @@ jobs:
           echo "DATESTAMP=${DATESTAMP}" >> $GITHUB_OUTPUT
           echo $IMAGE_DATE_TAG $DATESTAMP
 
-      - name: build and push staging
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: ./.github/actions/build-push-image-selfhosted
-        with:
-          registry: ${{ env.REGISTRY_PATH_PR }}
-          image-name: ${{ env.IMAGE_NAME }}
-          registry-user: ${{ secrets.REGISTRY_USER }}
-          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          image-tags: |
-            ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging
-            ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging-${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
-          build-args: |
-            RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
-            RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
-            FORKLIFT_VERSION=${{ env.FORKLIFT_VERSION }}
-            CODECOV_UPLOADER_VERSION=${{ env.CODECOV_UPLOADER_VERSION }}
-            CODECOV_CLI_VERSION=${{ env.CODECOV_CLI_VERSION }}
-            DISTRO_CODENAME=${{ env.DISTRO_CODENAME }}
+      # - name: build and push staging
+      #   if: ${{ github.event_name == 'pull_request' }}
+      #   # uses: ./.github/actions/build-push-image-selfhosted
+      #   uses: ./.github/actions/build-push-image
+      #   with:
+      #     registry: ${{ env.REGISTRY_PATH_PR }}
+      #     image-name: ${{ env.IMAGE_NAME }}
+      #     registry-user: ${{ secrets.REGISTRY_USER }}
+      #     registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+      #     image-tags: |
+      #       ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging
+      #       ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging-${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
+      #     build-args: |
+      #       RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
+      #       RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
+      #       FORKLIFT_VERSION=${{ env.FORKLIFT_VERSION }}
+      #       CODECOV_UPLOADER_VERSION=${{ env.CODECOV_UPLOADER_VERSION }}
+      #       CODECOV_CLI_VERSION=${{ env.CODECOV_CLI_VERSION }}
+      #       DISTRO_CODENAME=${{ env.DISTRO_CODENAME }}
 
       - name: build and push
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: ./.github/actions/build-push-image-selfhosted
+        # if: ${{ github.event_name == 'workflow_dispatch' }}
+        # uses: ./.github/actions/build-push-image-selfhosted
+        uses: ./.github/actions/build-push-image
         with:
+          push: false
           registry: ${{ env.REGISTRY_PATH }}
           image-name: ${{ env.IMAGE_NAME }}
           registry-user: ${{ secrets.REGISTRY_USER }}
