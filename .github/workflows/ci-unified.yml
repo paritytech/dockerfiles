@@ -21,7 +21,7 @@ env:
 
 jobs:
   Build:
-    runs-on: parity-default
+    runs-on: parity-large
     environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
     steps:
       - uses: actions/checkout@v4
@@ -67,7 +67,7 @@ jobs:
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           image-tags: |
-            docker.io/paritytech/ci-unified:bullseye-1.81.0 \
+            docker.io/paritytech/ci-unified:bullseye-1.81.0
             docker.io/paritytech/ci-unified:bullseye-1.81.0-v202411281558
             docker.io/paritytech/ci-unified:bullseye-1.81.0-2024-11-19
             docker.io/paritytech/ci-unified:bullseye-1.81.0-2024-11-19-v202411281558
