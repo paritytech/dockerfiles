@@ -8,6 +8,10 @@ on:
       - ".github/workflows/ci-unified.yml"
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 env:
   REGISTRY_PATH: "docker.io/paritytech"
   REGISTRY_PATH_PR: "docker.io/paritypr"
@@ -21,7 +25,7 @@ env:
 
 jobs:
   Build:
-    runs-on: parity-default
+    runs-on: parity-large
     environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
     steps:
       - uses: actions/checkout@v4
