@@ -25,7 +25,7 @@ env:
 
 jobs:
   Build:
-    runs-on: parity-large
+    runs-on: ubuntu-latest
     environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
     steps:
       - uses: actions/checkout@v4
@@ -42,12 +42,13 @@ jobs:
 
       - name: build and push staging
         if: ${{ github.event_name == 'pull_request' }}
-        uses: ./.github/actions/build-push-image-selfhosted
+        uses: ./.github/actions/build-push-image
         with:
           registry: ${{ env.REGISTRY_PATH_PR }}
           image-name: ${{ env.IMAGE_NAME }}
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          build-opts: "--squash"
           image-tags: |
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging-${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
@@ -61,12 +62,13 @@ jobs:
 
       - name: build and push
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: ./.github/actions/build-push-image-selfhosted
+        uses: ./.github/actions/build-push-image
         with:
           registry: ${{ env.REGISTRY_PATH }}
           image-name: ${{ env.IMAGE_NAME }}
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          build-opts: "--squash"
           image-tags: |
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
