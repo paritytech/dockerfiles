@@ -3,8 +3,10 @@ ARG REGISTRY_PATH=docker.io/paritytech
 FROM docker.io/paritytech/gnupg:latest
 
 # 'Parity Security Team <security@parity.io>'
-ARG KEY_ID=9D4B2B6EB8F97156D19669A9FF0812D491B96798
-ARG KEY_SERVER=hkps://keys.mailvelope.com
+ARG SEC=9D4B2B6EB8F97156D19669A9FF0812D491B96798
+# 'Parity Release Team <release-team@parity.io>'
+ARG KMS=90BD75EBBB8E95CB3DA6078F94A4029AB4B35DAE
+ARG KEY_SERVER=hkps://keyserver.ubuntu.com
 ARG VCS_REF=master
 ARG BUILD_DATE=""
 
@@ -22,8 +24,8 @@ LABEL summary="Base image with Parity-Keyring" \
 
 USER root
 
-RUN gpg --recv-keys --keyserver $KEY_SERVER $KEY_ID && \
-	gpg --export $KEY_ID > /usr/share/keyrings/parity.gpg && \
+RUN gpg --recv-keys --keyserver $KEY_SERVER $SEC $KMS && \
+	gpg --export $SEC $KMS > /usr/share/keyrings/parity.gpg && \
 	echo 'deb [signed-by=/usr/share/keyrings/parity.gpg] https://releases.parity.io/deb release main' > /etc/apt/sources.list.d/parity.list && \
 	apt update && \
 	apt install parity-keyring
