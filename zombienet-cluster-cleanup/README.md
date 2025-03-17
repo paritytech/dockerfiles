@@ -30,7 +30,7 @@ spec:
               image: paritytech/zombienet-cluster-cleanup
               env:
                 - name: NS_LIFE_TIME
-                  value: 3
+                  value: "2"
           restartPolicy: OnFailure
 ```
 

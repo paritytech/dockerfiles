@@ -4,7 +4,7 @@ from kubernetes import client, config
 import requests
 import pytz
 
-NS_LIFE_TIME = os.getenv('LIFE_TIME', 2)
+NS_LIFE_TIME = os.getenv('NS_LIFE_TIME', "2")
 
 def main():
     config.load_incluster_config()
@@ -12,7 +12,7 @@ def main():
     v1 = client.CoreV1Api()
 
     prefix = 'zombie-'
-    time_delta = timedelta(hours=NS_LIFE_TIME)
+    time_delta = timedelta(hours=int(NS_LIFE_TIME))
 
     now = datetime.utcnow().replace(tzinfo=pytz.UTC)
     cutoff_time = now - time_delta
