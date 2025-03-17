@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
-      - "zombinet/cluster_cleanup/*"
+      - "zombienet-cluster-cleanup/*"
       - ".github/workflows/zombinet-cluster-cleanup.yml"
   workflow_dispatch:
 
