@@ -6,6 +6,7 @@ import pytz
 
 NS_LIFE_TIME = os.getenv('NS_LIFE_TIME', "2")
 
+
 def main():
     config.load_incluster_config()
 
