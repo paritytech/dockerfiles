@@ -4,7 +4,7 @@ from kubernetes import client, config
 import requests
 import pytz
 
-NS_LIFE_TIME = os.getenv('LIFE_TIME', 3)
+NS_LIFE_TIME = os.getenv('LIFE_TIME', 2)
 
 def main():
     config.load_incluster_config()
