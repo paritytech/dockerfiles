@@ -29,7 +29,7 @@ RUN apt-get update && \
 # add repo's gpg keys and install the published polkadot binary
 	gpg --keyserver ${GPG_KEYSERVER} --recv-keys ${PARITY_SEC_GPGKEY} ${PARITY_SEC_PGPKMSKEY} && \
 	gpg --export ${PARITY_SEC_GPGKEY} ${PARITY_SEC_PGPKMSKEY} > /usr/share/keyrings/parity.gpg && \
-	echo 'deb [signed-by=/usr/share/keyrings/parity.gpg] https://releases.parity.io/deb staging main' > /etc/apt/sources.list.d/parity.list && \
+	echo 'deb [signed-by=/usr/share/keyrings/parity.gpg] https://releases.parity.io/deb release main' > /etc/apt/sources.list.d/parity.list && \
 	apt-get update && \
 # apt cleanup
 	apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* ; \
