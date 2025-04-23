@@ -88,7 +88,7 @@ ARG GH_TOOL_VERSION="2.54.0"
 RUN wget "https://github.com/cli/cli/releases/download/v${GH_TOOL_VERSION}/gh_${GH_TOOL_VERSION}_linux_amd64.deb" && \
     dpkg -i "gh_${GH_TOOL_VERSION}_linux_amd64.deb"
 
-ARG RUST_STABLE_VERSION="1.84.1"
+ARG RUST_STABLE_VERSION="1.85.0"
 
 # generic ci | install stable rust
 RUN rustup toolchain install "${RUST_STABLE_VERSION}" --profile minimal && \

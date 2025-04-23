@@ -16,7 +16,7 @@ env:
   REGISTRY_PATH: "docker.io/paritytech"
   REGISTRY_PATH_PR: "docker.io/paritypr"
   IMAGE_NAME: "ci-unified"
-  RUST_STABLE_VERSION: "1.84.1"
+  RUST_STABLE_VERSION: "1.85.0"
   RUST_NIGHTLY_VERSION: "2025-01-28"
   FORKLIFT_VERSION: "0.13.2"
   CODECOV_UPLOADER_VERSION: "v0.7.3"
