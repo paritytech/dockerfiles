@@ -130,7 +130,7 @@ RUN cargo install cargo-spellcheck cargo-nextest --locked
 RUN cargo install wasm-bindgen-cli --version 0.2.73
 
 # generic ci | install taplo
-RUN cargo install taplo-cli --locked --version 0.8.1
+RUN cargo install taplo-cli --locked --version 0.9.3
 
 # generic ci | install zepter
 RUN cargo install zepter --locked --version 0.15.0
