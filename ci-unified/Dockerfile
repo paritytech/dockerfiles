@@ -141,7 +141,7 @@ RUN cargo install zepter --locked --version 0.15.0
 RUN cargo install wasm-gc
 
 # generic ci | install cargo-edit. Manipilation of Cargo.tomls (like bumping versions) in CI
-RUN cargo install cargo-edit
+RUN cargo install cargo-edit --version 0.13.1
 
 # generic ci | install cargo hfuzz and honggfuzz dependencies
 RUN apt-get -y update && \
