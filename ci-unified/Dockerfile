@@ -115,13 +115,15 @@ RUN rustup target add wasm32-unknown-unknown
 RUN apt-get install -y --no-install-recommends g++
 RUN rustup target add x86_64-unknown-linux-musl
 
+RUN cargo install cargo-deny --version 0.16.4
 # generic ci | install common cargo tools
-RUN cargo install cargo-web wasm-pack cargo-deny cargo-hack \
+RUN cargo install cargo-web wasm-pack cargo-hack \
     mdbook mdbook-mermaid mdbook-linkcheck mdbook-admonish mdbook-last-changed
 
 RUN cargo install mdbook-graphviz --locked
 
-RUN cargo install cargo-spellcheck cargo-nextest --locked
+RUN cargo install cargo-spellcheck --version 0.15.1 --locked
+RUN cargo install cargo-nextest --locked
 
 # generic ci | diener 0.4.6 | NOTE: before upgrading please test new version with companion build, example can be found here: https://github.com/paritytech/substrate/pull/12710
 # RUN cargo install diener --version 0.4.6
@@ -139,7 +141,7 @@ RUN cargo install zepter --locked --version 0.15.0
 RUN cargo install wasm-gc
 
 # generic ci | install cargo-edit. Manipilation of Cargo.tomls (like bumping versions) in CI
-RUN cargo install cargo-edit
+RUN cargo install cargo-edit --version 0.13.1
 
 # generic ci | install cargo hfuzz and honggfuzz dependencies
 RUN apt-get -y update && \
@@ -167,7 +169,8 @@ RUN rustup component add rustfmt clippy rust-src \
 
 # contracts ci
 # `cargo-dylint` and `dylint-link` are dependencies needed to run `cargo-contract`.
-RUN	cargo install cargo-dylint dylint-link
+RUN cargo install cargo-dylint --version 3.5.1
+RUN	cargo install dylint-link
 
 # contracts ci
 # Install the latest `cargo-contract`
