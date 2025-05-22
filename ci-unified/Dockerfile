@@ -115,8 +115,9 @@ RUN rustup target add wasm32-unknown-unknown
 RUN apt-get install -y --no-install-recommends g++
 RUN rustup target add x86_64-unknown-linux-musl
 
+RUN cargo install cargo-deny --version 0.16.4
 # generic ci | install common cargo tools
-RUN cargo install cargo-web wasm-pack cargo-deny cargo-hack \
+RUN cargo install cargo-web wasm-pack cargo-hack \
     mdbook mdbook-mermaid mdbook-linkcheck mdbook-admonish mdbook-last-changed
 
 RUN cargo install mdbook-graphviz --locked
