@@ -11,7 +11,7 @@ on:
 env:
   REGISTRY_PATH: "docker.io/paritytech"
   REGISTRY_PATH_PR: "docker.io/paritypr"
-  IMAGE_NAME: "acng"
+  IMAGE_NAME: "apt-cacher-ng"
 
 jobs:
   Build:
