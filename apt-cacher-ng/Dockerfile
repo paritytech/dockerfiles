@@ -9,7 +9,7 @@ RUN set -uex; \
     apt-get clean all; \
     rm -rf /var/lib/apt/lists/*;
 
-COPY files/* /etc/apt-cacher-ng/
+COPY apt-cacher-ng/files/* /etc/apt-cacher-ng/
 
 EXPOSE 3142
 VOLUME ["/var/cache/apt-cacher-ng"]
