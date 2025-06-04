@@ -35,6 +35,7 @@ jobs:
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           image-name: ${{ env.IMAGE_NAME }}
           image-tags: >
+            ${{ steps.vars.outputs.IMAGE_DATE_TAG }}
             staging
 
       - name: build and push
