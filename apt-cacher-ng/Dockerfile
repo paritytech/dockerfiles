@@ -1,11 +1,11 @@
-FROM debian:12-slim
+FROM debian:11-slim
 
 RUN set -uex; \
     apt-get update -y; \
     apt-get install apt-cacher-ng -y; \
     mv /etc/apt-cacher-ng/acng.conf /etc/apt-cacher-ng/acng.conf.original; \
     ln -sf /dev/stdout /var/log/apt-cacher-ng/apt-cacher.log; \
-    # ln -sf /dev/stderr /var/log/apt-cacher-ng/apt-cacher.err; \
+    ln -sf /dev/stderr /var/log/apt-cacher-ng/apt-cacher.err; \
     apt-get clean all; \
     rm -rf /var/lib/apt/lists/*;
 
