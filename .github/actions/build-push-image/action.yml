@@ -72,4 +72,6 @@ runs:
     - name: Print image url
       shell: bash
       if: ${{ inputs.push }}
-      run: echo "Image pushed to ${{ steps.push-image.outputs.registry-paths }}"
+      run: |
+        echo "Image pushed to ${{ steps.push-image.outputs.registry-paths }}"
+        echo "Image pushed to ${{ steps.push-image.outputs.registry-paths }}" > $GITHUB_STEP_SUMMARY
