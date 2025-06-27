@@ -127,7 +127,7 @@ RUN cargo install cargo-spellcheck cargo-nextest --locked
 # RUN cargo install diener --version 0.4.6
 
 # generic ci | wasm-bindgen-cli version should match the one pinned in substrate
-RUN cargo install wasm-bindgen-cli --version 0.2.73
+RUN cargo install wasm-bindgen-cli --version 0.2.88
 
 # generic ci | install taplo
 RUN cargo install taplo-cli --locked --version 0.9.3
