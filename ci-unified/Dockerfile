@@ -88,7 +88,7 @@ ARG GH_TOOL_VERSION="2.54.0"
 RUN wget "https://github.com/cli/cli/releases/download/v${GH_TOOL_VERSION}/gh_${GH_TOOL_VERSION}_linux_amd64.deb" && \
     dpkg -i "gh_${GH_TOOL_VERSION}_linux_amd64.deb"
 
-ARG RUST_STABLE_VERSION="1.85.0"
+ARG RUST_STABLE_VERSION="1.88.0"
 
 # generic ci | install stable rust
 RUN rustup toolchain install "${RUST_STABLE_VERSION}" --profile minimal && \
@@ -100,7 +100,7 @@ RUN ln -s "/usr/local/rustup/toolchains/${RUST_STABLE_VERSION}-x86_64-unknown-li
 # generic ci | install additional rustup components for the ci tests
 RUN rustup component add rust-src rustfmt clippy
 
-ARG RUST_NIGHTLY_VERSION="2025-01-28"
+ARG RUST_NIGHTLY_VERSION="2025-06-27"
 
 # generic ci | install specific rust nightly, default is stable, use minimum components
 RUN rustup toolchain install "nightly-${RUST_NIGHTLY_VERSION}" --profile minimal --component rustfmt --component rust-analyzer
@@ -127,7 +127,7 @@ RUN cargo install cargo-spellcheck cargo-nextest --locked
 # RUN cargo install diener --version 0.4.6
 
 # generic ci | wasm-bindgen-cli version should match the one pinned in substrate
-RUN cargo install wasm-bindgen-cli --version 0.2.73
+RUN cargo install wasm-bindgen-cli --version 0.2.88
 
 # generic ci | install taplo
 RUN cargo install taplo-cli --locked --version 0.9.3
@@ -175,7 +175,7 @@ RUN	cargo install --git https://github.com/paritytech/cargo-contract \
     --locked --branch master --force
 
 # contracts ci
-RUN cargo install subkey
+RUN cargo install subkey --locked
 
 # contracts ci
 # Download the latest `substrate-contracts-node` binary
