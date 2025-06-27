@@ -175,7 +175,7 @@ RUN	cargo install --git https://github.com/paritytech/cargo-contract \
     --locked --branch master --force
 
 # contracts ci
-RUN cargo install subkey
+RUN cargo install subkey --locked
 
 # contracts ci
 # Download the latest `substrate-contracts-node` binary
