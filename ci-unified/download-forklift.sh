@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DL_PATH="$HOME/.forklift4"
+DL_PATH="$HOME/.forklift/bin"
 VERSION="latest"
 
 while getopts "p:v:" flag; do
