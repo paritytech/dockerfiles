@@ -291,7 +291,7 @@ ARG FORKLIFT_VERSION="0.14.1"
 
 RUN bash download-forklift.sh -v ${FORKLIFT_VERSION} -p ./forklift/
 
-ENV FORKLIFT_metrics_pushEndpoint="http://alloy-forwarder-stg.alloy.svc.cluster.local:8080/api/v1/metrics/write"
+ENV FORKLIFT_metrics_pushEndpoint="http://alloy-forwarder.alloy.svc.cluster.local:8080/api/v1/metrics/write"
 
 ### codecov
 
