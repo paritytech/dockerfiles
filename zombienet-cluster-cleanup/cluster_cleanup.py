@@ -8,6 +8,7 @@ NS_LIFE_TIME = os.getenv('NS_LIFE_TIME', "2")
 
 
 def main():
+    print("Starting cluster cleanup...")
     config.load_incluster_config()
 
     v1 = client.CoreV1Api()
@@ -17,7 +18,8 @@ def main():
 
     now = datetime.utcnow().replace(tzinfo=pytz.UTC)
     cutoff_time = now - time_delta
-
+    print(f"Current time: {now}, Cutoff time for deletion: {cutoff_time}")
+    print(f"Looking for namespaces with prefix '{prefix}' older than {NS_LIFE_TIME} hours...")
     namespace_list = v1.list_namespace().items
     for ns in namespace_list:
         if ns.metadata.name.startswith(prefix):
@@ -31,6 +33,7 @@ def main():
     plural = 'podmonitors'
     namespace = 'monitoring'
 
+    print(f"Looking for PodMonitors in namespace '{namespace}' older than {NS_LIFE_TIME} hours...")
     custom_api = client.CustomObjectsApi()
     pm_list = custom_api.list_namespaced_custom_object(group, api_version, namespace, plural)['items']
 
@@ -41,6 +44,8 @@ def main():
         if creation_time < cutoff_time:
             print(f"Found old PodMonitor {name} in namespace {namespace} (created {now - creation_time} ago).")
             custom_api.delete_namespaced_custom_object(group, api_version, namespace, plural, name, body={}, grace_period_seconds=0)
+
+    print("Cluster cleanup completed.")
 
 
 if __name__ == "__main__":
