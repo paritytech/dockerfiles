@@ -24,7 +24,6 @@ def main():
             creation_time = ns.metadata.creation_timestamp.replace(tzinfo=pytz.UTC)
             if creation_time < cutoff_time:
                 print(f"Found zombie namespace {ns.metadata.name} (created {now - creation_time} ago and matches the prefix).")
-                send_alert(f"namespace_cleanup_{ns.metadata.name}", "warning", f"Deleting zombie namespace {ns.metadata.name} (created {now - creation_time} ago")
                 v1.delete_namespace(ns.metadata.name)
 
     api_version = 'v1'
@@ -41,26 +40,8 @@ def main():
         creation_time = creation_time.astimezone(pytz.UTC)
         if creation_time < cutoff_time:
             print(f"Found old PodMonitor {name} in namespace {namespace} (created {now - creation_time} ago).")
-            send_alert(f"podmonitor_cleanup_{name}", "warning", f"Deleting PodMonitor {name} in namespace {namespace} (created {now - creation_time} ago).")
             custom_api.delete_namespaced_custom_object(group, api_version, namespace, plural, name, body={}, grace_period_seconds=0)
 
-def send_alert(alertname, severity, message):
-    url = 'https://alertmanager.parity-mgmt.parity.io/api/v1/alerts'
-    headers = {'Content-Type': 'application/json'}
-    payload = [
-        {
-            "labels": {
-                "domain": "parity-zombienet",
-                "alertname": alertname,
-                "severity": severity
-            },
-            "annotations": {
-                "message": f"{message}"
-            },
-            "generatorURL": "https://grafana.parity-mgmt.parity.io/"
-        }
-    ]
-    response = requests.post(url, headers=headers, json=payload)
 
 if __name__ == "__main__":
     main()
