@@ -348,11 +348,9 @@ RUN rustup show && \
 # substrate-contracts-node-rand-extension --version
 RUN forklift version
 
-RUN echo "solc version" \
-    solc --version
+RUN solc --version
 
-RUN echo "resolc version" \
-    resolc --version
+RUN resolc --version
 
 # finalize | cargo clean up, removes compilation artifacts cargo install creates (>250M)
 RUN rm -rf "${CARGO_HOME}/registry" "${CARGO_HOME}/git" /root/.cache/sccache
