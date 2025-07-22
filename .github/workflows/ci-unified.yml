@@ -22,6 +22,8 @@ env:
   CODECOV_UPLOADER_VERSION: "v0.7.3"
   CODECOV_CLI_VERSION: "v0.6.0"
   DISTRO_CODENAME: "bullseye"
+  SOLC_VERSION: "v0.8.30"
+  RESOLC_VERSION: "v0.3.0"
 
 jobs:
   Build:
@@ -59,6 +61,8 @@ jobs:
             CODECOV_UPLOADER_VERSION=${{ env.CODECOV_UPLOADER_VERSION }}
             CODECOV_CLI_VERSION=${{ env.CODECOV_CLI_VERSION }}
             DISTRO_CODENAME=${{ env.DISTRO_CODENAME }}
+            SOLC_VERSION=${{env.SOLC_VERSION}}
+            RESOLC_VERSION=${{env.RESOLC_VERSION}}
 
       - name: build and push
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -82,3 +86,5 @@ jobs:
             CODECOV_UPLOADER_VERSION=${{ env.CODECOV_UPLOADER_VERSION }}
             CODECOV_CLI_VERSION=${{ env.CODECOV_CLI_VERSION }}
             DISTRO_CODENAME=${{ env.DISTRO_CODENAME }}
+            SOLC_VERSION=${{env.SOLC_VERSION}}
+            RESOLC_VERSION=${{env.RESOLC_VERSION}}

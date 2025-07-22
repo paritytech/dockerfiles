@@ -293,6 +293,16 @@ RUN bash download-forklift.sh -v ${FORKLIFT_VERSION} -p ./forklift/
 
 ENV FORKLIFT_metrics_pushEndpoint="http://alloy-forwarder.alloy.svc.cluster.local:8080/api/v1/metrics/write"
 
+
+### solc/resolc
+COPY ci-unified/download-bin.sh download-bin.sh
+
+ARG SOLC_VERSION="v0.8.30"
+RUN bash download-bin.sh solc ${SOLC_VERSION}
+
+ARG RESOLC_VERSION="v0.3.0"
+RUN bash download-bin.sh resolc ${RESOLC_VERSION}
+
 ### codecov
 
 
@@ -337,6 +347,10 @@ RUN rustup show && \
 # ink-waterfall-ci
 # substrate-contracts-node-rand-extension --version
 RUN forklift version
+
+RUN solc --version
+
+RUN resolc --version
 
 # finalize | cargo clean up, removes compilation artifacts cargo install creates (>250M)
 RUN rm -rf "${CARGO_HOME}/registry" "${CARGO_HOME}/git" /root/.cache/sccache
