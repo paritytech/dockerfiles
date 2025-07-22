@@ -295,6 +295,7 @@ ENV FORKLIFT_metrics_pushEndpoint="http://alloy-forwarder.alloy.svc.cluster.loca
 
 
 ### solc/resolc
+COPY ci-unified/download-bin.sh download-bin.sh
 
 ARG SOLC_VERSION="v0.8.30"
 RUN bash download-bin solc ${SOLC_VERSION}
