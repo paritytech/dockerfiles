@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  REGISTRY_PATH: "docker.io/paritytech"
-  REGISTRY_PATH_PR: "docker.io/paritypr"
+  REGISTRY_PATH: "ghcr.io/paritytech/dockerfiles"
+  REGISTRY_PATH_PR: "ghcr.io/paritytech/dockerfiles"
   IMAGE_NAME: "ci-unified"
   RUST_STABLE_VERSION: "1.88.0"
   RUST_NIGHTLY_VERSION: "2025-06-27"
@@ -27,7 +27,10 @@ env:
 
 jobs:
   Build:
-    runs-on: ubuntu-latest
+    runs-on: parity-large-test
+    permissions:
+      contents: read
+      packages: write
     environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
     steps:
       - uses: actions/checkout@v4
@@ -48,8 +51,8 @@ jobs:
         with:
           registry: ${{ env.REGISTRY_PATH_PR }}
           image-name: ${{ env.IMAGE_NAME }}
-          registry-user: ${{ secrets.REGISTRY_USER }}
-          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          registry-user: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
           build-opts: "--squash"
           image-tags: |
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:staging
@@ -70,8 +73,8 @@ jobs:
         with:
           registry: ${{ env.REGISTRY_PATH }}
           image-name: ${{ env.IMAGE_NAME }}
-          registry-user: ${{ secrets.REGISTRY_USER }}
-          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+          registry-user: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
           build-opts: "--squash"
           image-tags: |
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}
