@@ -27,7 +27,7 @@ env:
 
 jobs:
   Build:
-    runs-on: parity-large-test
+    runs-on: parity-large-new
     permissions:
       contents: read
       packages: write
