@@ -39,7 +39,7 @@ runs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get -y install buildah
+        sudo apt-get -y install buildah podman
 
     - name: buildah build
       id: build-image
