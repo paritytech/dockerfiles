@@ -41,6 +41,13 @@ runs:
         sudo apt-get update
         sudo apt-get -y install buildah podman
 
+    - name: Log in
+      uses: redhat-actions/podman-login@v1
+      with:
+        username: ${{ inputs.registry-user }}
+        password: ${{ inputs.registry-password }}
+        registry: ${{ inputs.registry }}
+
     - name: buildah build
       id: build-image
       uses: redhat-actions/buildah-build@v2
@@ -58,13 +65,6 @@ runs:
         extra-args: |
           --format=docker
           ${{ inputs.build-opts }}
-
-    - name: Log in
-      uses: redhat-actions/podman-login@v1
-      with:
-        username: ${{ inputs.registry-user }}
-        password: ${{ inputs.registry-password }}
-        registry: "docker.io"
 
     - name: push
       id: push-image
