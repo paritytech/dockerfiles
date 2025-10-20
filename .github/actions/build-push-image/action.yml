@@ -35,6 +35,12 @@ runs:
       run: |
         echo "BUILD_DATE='$(date +%Y%m%d)'" >> $GITHUB_OUTPUT
 
+    - name: install buildah
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install buildah
+
     - name: buildah build
       id: build-image
       uses: redhat-actions/buildah-build@v2
