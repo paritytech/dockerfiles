@@ -116,7 +116,7 @@ RUN apt-get install -y --no-install-recommends g++
 RUN rustup target add x86_64-unknown-linux-musl
 
 # generic ci | install common cargo tools
-RUN cargo install cargo-deny --version 0.18.4
+RUN cargo install cargo-deny --version 0.18.4 --locked
 
 RUN cargo install cargo-web wasm-pack cargo-hack \
     mdbook mdbook-mermaid mdbook-linkcheck mdbook-admonish mdbook-last-changed
