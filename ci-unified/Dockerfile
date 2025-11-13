@@ -169,7 +169,9 @@ RUN rustup component add rustfmt clippy rust-src \
 
 # contracts ci
 # `cargo-dylint` and `dylint-link` are dependencies needed to run `cargo-contract`.
-RUN	cargo install cargo-dylint dylint-link
+RUN	cargo install cargo-dylint --version 4.1.0 --locked
+RUN	cargo install dylint-link --version 4.1.0 --locked
+
 
 # contracts ci
 # Install the latest `cargo-contract`
