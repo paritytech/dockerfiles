@@ -36,6 +36,7 @@ runs:
         echo "BUILD_DATE='$(date +%Y%m%d)'" >> $GITHUB_OUTPUT
 
     - name: Install buildah
+      shell: bash
       run: |
         sudo apt-get -y update
         sudo apt-get -y install buildah
