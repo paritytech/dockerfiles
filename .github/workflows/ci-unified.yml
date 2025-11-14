@@ -23,11 +23,11 @@ env:
   CODECOV_CLI_VERSION: "v0.6.0"
   DISTRO_CODENAME: "bullseye"
   SOLC_VERSION: "v0.8.30"
-  RESOLC_VERSION: "v0.3.0"
+  RESOLC_VERSION: "v0.5.0"
 
 jobs:
   Build:
-    runs-on: ubuntu-latest
+    runs-on: parity-large-new
     environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
     steps:
       - uses: actions/checkout@v4

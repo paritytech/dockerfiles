@@ -116,7 +116,9 @@ RUN apt-get install -y --no-install-recommends g++
 RUN rustup target add x86_64-unknown-linux-musl
 
 # generic ci | install common cargo tools
-RUN cargo install cargo-web wasm-pack cargo-deny cargo-hack \
+RUN cargo install cargo-deny --version 0.18.4 --locked
+
+RUN cargo install cargo-web wasm-pack cargo-hack \
     mdbook mdbook-mermaid mdbook-linkcheck mdbook-admonish mdbook-last-changed
 
 RUN cargo install mdbook-graphviz --locked
@@ -139,7 +141,7 @@ RUN cargo install zepter --locked --version 1.78.2
 RUN cargo install wasm-gc
 
 # generic ci | install cargo-edit. Manipilation of Cargo.tomls (like bumping versions) in CI
-RUN cargo install cargo-edit
+RUN cargo install cargo-edit --version 0.13.7 --locked
 
 # generic ci | install cargo hfuzz and honggfuzz dependencies
 RUN apt-get -y update && \
@@ -167,7 +169,9 @@ RUN rustup component add rustfmt clippy rust-src \
 
 # contracts ci
 # `cargo-dylint` and `dylint-link` are dependencies needed to run `cargo-contract`.
-RUN	cargo install cargo-dylint dylint-link
+RUN	cargo install cargo-dylint --version 4.1.0 --locked
+RUN	cargo install dylint-link --version 4.1.0 --locked
+
 
 # contracts ci
 # Install the latest `cargo-contract`
@@ -300,7 +304,7 @@ COPY ci-unified/download-bin.sh download-bin.sh
 ARG SOLC_VERSION="v0.8.30"
 RUN bash download-bin.sh solc ${SOLC_VERSION}
 
-ARG RESOLC_VERSION="v0.3.0"
+ARG RESOLC_VERSION="v0.5.0"
 RUN bash download-bin.sh resolc ${RESOLC_VERSION}
 
 ### codecov
