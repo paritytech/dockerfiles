@@ -47,7 +47,7 @@ runs:
         username: ${{ inputs.registry-user }}
         password: ${{ inputs.registry-password }}
         registry: "docker.io"
-        auth_file_path: /tmp/storage-run-0/containers/auth.json
+        auth_file_path: /root/.docker/config.json
 
     - name: buildah build
       id: build-image
