@@ -222,8 +222,7 @@ RUN rustup component add \
 
 # ink-ci-linux
 # We require `grcov` for coverage reporting and `rust-covfix` to improve it.
-# We require `xargo` so that `miri` runs properly
-RUN	cargo install grcov rust-covfix xargo
+RUN	cargo install grcov rust-covfix
 
 
 ### ink-waterfall-ci ###
@@ -274,7 +273,7 @@ RUN	cargo install --git https://github.com/paritytech/ink-waterfall.git csv-comp
 # codecov from ink-ci-linux
 
 # parity-scale-codec
-RUN	cargo +nightly-${RUST_NIGHTLY_VERSION} install grcov rust-covfix xargo dylint-link
+RUN	cargo +nightly-${RUST_NIGHTLY_VERSION} install grcov rust-covfix dylint-link
 
 
 # install rustc-rv32e-toolchain
