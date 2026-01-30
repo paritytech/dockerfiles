@@ -135,7 +135,7 @@ RUN cargo install wasm-bindgen-cli --version 0.2.88
 RUN cargo install taplo-cli --locked --version 0.9.3
 
 # generic ci | install zepter
-RUN cargo install zepter --locked --version 1.78.2
+RUN cargo install zepter --locked --version 1.82.1
 
 # generic ci | install wasm-gc. useful for stripping slimming down wasm binaries
 RUN cargo install wasm-gc
