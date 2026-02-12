@@ -47,7 +47,8 @@ runs:
         username: ${{ inputs.registry-user }}
         password: ${{ inputs.registry-password }}
         registry: "docker.io"
-        auth_file_path: /root/.docker/config.json
+        # Use runner temp to be compatible with both GitHub-hosted and self-hosted runners.
+        auth_file_path: ${{ runner.temp }}/docker-config.json
 
     - name: buildah build
       id: build-image
