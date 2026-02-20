@@ -42,6 +42,7 @@ runs:
         sudo apt-get -y install buildah podman
 
     - run: mkdir -p /root/.docker/ || true
+      shell: bash
 
     - name: Log in
       uses: redhat-actions/podman-login@v1
