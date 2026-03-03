@@ -20,7 +20,6 @@ ENV SHELL=/bin/bash \
     CXX=clang-${LLVM_VERSION} \
     RUST_BACKTRACE=1
 
-
 ### base ###
 
 # base | add non-root user
