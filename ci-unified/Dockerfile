@@ -39,7 +39,7 @@ RUN sed -i "s/REPLACEME/${LLVM_VERSION}/g" /root/.cargo/config && \
 RUN set -eux; \
     apt-get -y update; \
     apt-get install -y --no-install-recommends \
-    libssl-dev make cmake graphviz sudo \
+    libssl-dev make cmake graphviz \
     git pkg-config curl wget time rhash ca-certificates jq \
     python3 python3-pip lsof ruby ruby-bundler git-restore-mtime \
     bzip2 xz-utils zstd unzip gnupg protobuf-compiler
