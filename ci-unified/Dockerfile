@@ -20,7 +20,6 @@ ENV SHELL=/bin/bash \
     CXX=clang-${LLVM_VERSION} \
     RUST_BACKTRACE=1
 
-
 ### base ###
 
 # base | add non-root user
@@ -34,6 +33,10 @@ COPY ci-unified/cargo-config /home/nonroot/.cargo/config
 # base | replace REPLACEME in the cargo configs with the real llvm version
 RUN sed -i "s/REPLACEME/${LLVM_VERSION}/g" /root/.cargo/config && \
     sed -i "s/REPLACEME/${LLVM_VERSION}/g" /home/nonroot/.cargo/config
+
+# base | add fake sudo, actual sudo causes issues
+RUN echo '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && \
+    chmod +x /usr/local/bin/sudo
 
 # base | install tools and dependencies
 RUN set -eux; \
