@@ -1,9 +1,12 @@
-ARG REGISTRY_PATH=docker.io/paritytech
-
 FROM docker.io/library/ubuntu:latest
 
+ARG REGISTRY_PATH=docker.io/paritytech
 # 'Parity Security Team <security@parity.io>'
 ARG GPG_KEYID=9D4B2B6EB8F97156D19669A9FF0812D491B96798
+# 'Parity Release Team <release-team@parity.io>'
+ARG PARITY_SEC_PGPKMSKEY=90BD75EBBB8E95CB3DA6078F94A4029AB4B35DAE
+ARG PARITY_SEC_PGPKMSKEY_GCP=CEF548177CEF100D77D82B602FB7D309A53DF6B3
+ARG GPG_KEYSERVER="keyserver.ubuntu.com"
 ARG VCS_REF=master
 ARG BUILD_DATE=""
 ARG UID=1001
@@ -29,7 +32,9 @@ RUN set -x \
 
 USER nonroot:nonroot
 
-RUN curl -LfSs "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${GPG_KEYID}&options=mr&exact=on" | gpg --import - \
+RUN curl -LfSs "https://${GPG_KEYSERVER}/pks/lookup?op=get&search=0x${GPG_KEYID}&options=mr&exact=on" | gpg --import - \
+  && curl -LfSs "https://${GPG_KEYSERVER}/pks/lookup?op=get&search=0x${PARITY_SEC_PGPKMSKEY}&options=mr&exact=on" | gpg --import - \
+  && curl -LfSs "https://${GPG_KEYSERVER}/pks/lookup?op=get&search=0x${PARITY_SEC_PGPKMSKEY_GCP}&options=mr&exact=on" | gpg --import - \
   && gpg --list-keys
 
 WORKDIR /home/nonroot

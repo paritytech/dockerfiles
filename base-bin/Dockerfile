@@ -6,6 +6,7 @@ ARG BUILD_DATE
 ARG GPG_KEYSERVER="keyserver.ubuntu.com"
 ARG PARITY_SEC_GPGKEY=9D4B2B6EB8F97156D19669A9FF0812D491B96798
 ARG PARITY_SEC_PGPKMSKEY=90BD75EBBB8E95CB3DA6078F94A4029AB4B35DAE
+ARG PARITY_SEC_PGPKMSKEY_GCP=CEF548177CEF100D77D82B602FB7D309A53DF6B3
 ARG DOC_URL=https://github.com/paritytech/polkadot
 ARG USER=parity
 
@@ -27,8 +28,8 @@ RUN apt-get update && \
 		libssl3 ca-certificates gnupg && \
 	useradd -m -u 1000 -U -s /bin/sh -d /${USER} ${USER} && \
 # add repo's gpg keys and install the published polkadot binary
-	gpg --keyserver ${GPG_KEYSERVER} --recv-keys ${PARITY_SEC_GPGKEY} ${PARITY_SEC_PGPKMSKEY} && \
-	gpg --export ${PARITY_SEC_GPGKEY} ${PARITY_SEC_PGPKMSKEY} > /usr/share/keyrings/parity.gpg && \
+	gpg --keyserver ${GPG_KEYSERVER} --recv-keys ${PARITY_SEC_GPGKEY} ${PARITY_SEC_PGPKMSKEY} ${PARITY_SEC_PGPKMSKEY_GCP}&& \
+	gpg --export ${PARITY_SEC_GPGKEY} ${PARITY_SEC_PGPKMSKEY} ${PARITY_SEC_PGPKMSKEY_GCP} > /usr/share/keyrings/parity.gpg && \
 	echo 'deb [signed-by=/usr/share/keyrings/parity.gpg] https://releases.parity.io/deb release main' > /etc/apt/sources.list.d/parity.list && \
 	apt-get update && \
 # apt cleanup
