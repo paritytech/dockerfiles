@@ -11,21 +11,6 @@ ENV RESTIC_VERSION="0.16.1" \
 
 WORKDIR /builds
 
-### TEMP DEBUG: probe resolc versions early — remove after diagnosis
-RUN set +e; \
-    apt-get -y update >/dev/null 2>&1; \
-    apt-get install -y --no-install-recommends curl ca-certificates >/dev/null 2>&1; \
-    echo "=== cpu flags ==="; \
-    grep -m1 flags /proc/cpuinfo; \
-    for V in v0.5.0 v0.6.0 v1.0.0 v1.1.0; do \
-      echo "=== resolc ${V} ==="; \
-      curl -Lsf -o /tmp/resolc "https://github.com/paritytech/revive/releases/download/${V}/resolc-x86_64-unknown-linux-musl" || { echo "download failed"; continue; }; \
-      chmod +x /tmp/resolc; \
-      /tmp/resolc --version; \
-      echo "exit: $?"; \
-    done; \
-    rm -f /tmp/resolc
-
 ENV SHELL=/bin/bash \
     DEBIAN_FRONTEND=noninteractive \
     RUSTUP_HOME=/usr/local/rustup \
