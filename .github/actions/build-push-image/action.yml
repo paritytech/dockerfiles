@@ -44,6 +44,9 @@ runs:
     - run: mkdir -p /root/.docker/ || true
       shell: bash
 
+    - run: mkdir -p /home/runner/.docker
+      shell: bash
+
     - name: Log in
       uses: redhat-actions/podman-login@v1
       with:
