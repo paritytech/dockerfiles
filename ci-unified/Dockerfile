@@ -306,7 +306,7 @@ COPY ci-unified/download-bin.sh download-bin.sh
 ARG SOLC_VERSION="v0.8.30"
 RUN bash download-bin.sh solc ${SOLC_VERSION}
 
-ARG RESOLC_VERSION="v0.5.0"
+ARG RESOLC_VERSION="v1.0.0"
 RUN bash download-bin.sh resolc ${RESOLC_VERSION}
 
 ### codecov
