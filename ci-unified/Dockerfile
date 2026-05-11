@@ -23,8 +23,8 @@ ENV SHELL=/bin/bash \
 ### base ###
 
 # base | add non-root user
-RUN groupadd -g 1000 nonroot && \
-    useradd -u 1000 -g 1000 -s /bin/bash -m nonroot
+RUN groupadd -g 1001 nonroot && \
+    useradd -u 1001 -g 1001 -s /bin/bash -m nonroot
 
 # base | customize cargo configuration
 COPY ci-unified/cargo-config /root/.cargo/config
