@@ -34,7 +34,7 @@ env:
 jobs:
   Build:
     runs-on: parity-large-new
-    environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
+    environment: ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && 'main' || null }}
     steps:
       - uses: actions/checkout@v4
 
