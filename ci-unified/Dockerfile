@@ -338,6 +338,9 @@ RUN curl -Os https://cli.codecov.io/${CODECOV_CLI_VERSION}/linux/codecov && \
     mv codecov /usr/local/bin/codecovcli && \
     rm -f codecov.SHA256SUM codecov.SHA256SUM.sig
 
+### fix 'dubious ownership'
+RUN git config --system --add safe.directory '*'
+
 ### finalize ###
 
 
