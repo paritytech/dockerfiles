@@ -317,7 +317,11 @@ RUN bash download-bin.sh resolc ${RESOLC_VERSION}
 ### codecov
 
 
-RUN curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --import
+# codecov moved its signing key from the "codecovsecurity" keybase account (now 404) to "codecovsecops",
+# see https://docs.codecov.com/docs/codecov-uploader. Same key as before: fingerprint 2703 4E7F DB85 0E0B BC2C 62FF 806B B28A ED77 9869.
+# `curl -f` fails loudly on a 404 instead of piping an error page into gpg; the list-keys call asserts we got the expected key.
+RUN curl -fsSL https://keybase.io/codecovsecops/pgp_keys.asc | gpg --import && \
+    gpg --list-keys 27034E7FDB850E0BBC2C62FF806BB28AED779869
 
 # codecov uploader
 ARG CODECOV_UPLOADER_VERSION="v0.7.3"
