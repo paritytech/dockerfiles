@@ -38,6 +38,11 @@ RUN sed -i "s/REPLACEME/${LLVM_VERSION}/g" /root/.cargo/config && \
 RUN echo '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && \
     chmod +x /usr/local/bin/sudo
 
+# base | bullseye LTS ended on 2026-08-31. The bullseye-security suite is no longer refreshed and its
+# Release file has expired (Valid-Until 2026-09-07), which makes every `apt-get update` fail with
+# "E: Release file ... is expired". Drop the suite; bullseye main and bullseye-updates carry no Valid-Until.
+RUN sed -i '/bullseye-security/d' /etc/apt/sources.list
+
 # base | install tools and dependencies
 RUN set -eux; \
     apt-get -y update; \
