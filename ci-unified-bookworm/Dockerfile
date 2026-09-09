@@ -287,7 +287,7 @@ RUN wget -q https://github.com/paritytech/rustc-rv32e-toolchain/releases/downloa
 
 
 # forklift | install forklift
-COPY ci-unified/download-forklift.sh download-forklift.sh
+COPY ci-unified-bookworm/download-forklift.sh download-forklift.sh
 RUN chmod +x download-forklift.sh
 
 ARG FORKLIFT_VERSION="0.14.1"
@@ -298,7 +298,7 @@ ENV FORKLIFT_metrics_pushEndpoint="http://alloy-forwarder.alloy.svc.cluster.loca
 
 
 ### solc/resolc
-COPY ci-unified/download-bin.sh download-bin.sh
+COPY ci-unified-bookworm/download-bin.sh download-bin.sh
 
 ARG SOLC_VERSION="v0.8.30"
 RUN bash download-bin.sh solc ${SOLC_VERSION}

@@ -5,6 +5,12 @@
 
 This image is used for running CI jobs for Parity repositories. It could also work for you if you're building something on Polkadot SDK.
 
+> [!IMPORTANT]
+> This image is based on Debian 11 (`bullseye`), which reached end of life on 2026-08-31. A Debian 12
+> revision is published in parallel as
+> [`paritytech/ci-unified-bookworm`](../ci-unified-bookworm/README.md) — please migrate to it. Both
+> images are kept for a while; this one will eventually be retired.
+
 ### Specification
 
 The actual image's revision is based on Debian 11 (aka `bullseye`) and contains the following:
