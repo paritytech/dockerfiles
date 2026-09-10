@@ -192,7 +192,16 @@ RUN	curl -L -o substrate-contracts-node-linux.tar.gz 'https://github.com/parityt
 # contracts ci
 # We use `estuary` as a lightweight cargo registry in the CI to test if
 # publishing `cargo-contract` to it and installing it from there works.
-RUN	cargo install --git https://github.com/onelson/estuary.git --force --locked
+# estuary is unmaintained (last commit 2022-03-07) and its Cargo.lock pins openssl-sys 0.9.58, which
+# predates OpenSSL 3 and fails to build against bookworm's 3.0.x with
+# "pasting formed 'RUST_VERSION_OPENSSL_(', an invalid preprocessing token".
+# Bump that one crate rather than dropping --locked, so the other 155 pinned dependencies stay
+# exactly as upstream resolved them.
+RUN git clone --depth 1 https://github.com/onelson/estuary.git /tmp/estuary && \
+    cd /tmp/estuary && \
+    cargo update -p openssl-sys && \
+    cargo install --path . --locked --force && \
+    rm -rf /tmp/estuary
 
 
 ### bridges-ci ###
