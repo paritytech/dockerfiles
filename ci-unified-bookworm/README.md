@@ -1,17 +1,19 @@
 # The unified Parity CI image (Debian 12 / bookworm)
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/paritytech/ci-unified-bookworm)](https://hub.docker.com/r/paritytech/ci-unified-bookworm/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/paritytech/ci-unified)](https://hub.docker.com/r/paritytech/ci-unified/tags)
 
 This is the Debian 12 (`bookworm`) revision of [`ci-unified`](../ci-unified/README.md), added because
 Debian 11 (`bullseye`) reached end of life on 2026-08-31 and its `bullseye-security` apt suite is no
 longer refreshed.
 
-Both images are built and published in parallel for the time being:
+It is published to the **same** `paritytech/ci-unified` repository as the bullseye image — the two are
+separated by the codename tag prefix, so migrating means changing a tag, not an image name. This
+directory only holds the Dockerfile; the workflow points the build at it via the `containerfile` input.
 
-| Image | Base | Status |
+| Tag prefix | Base | Status |
 | --- | --- | --- |
-| `paritytech/ci-unified` | Debian 11 `bullseye` | maintained for now, EOL base |
-| `paritytech/ci-unified-bookworm` | Debian 12 `bookworm` | migrate here |
+| `bullseye-*`, and `latest` | Debian 11 `bullseye` | maintained for now, EOL base |
+| `bookworm-*`, and `bookworm` | Debian 12 `bookworm` | migrate here |
 
 ### Specification
 
@@ -48,14 +50,18 @@ Same pattern as `ci-unified`:
 
 For example:
 
-* `paritytech/ci-unified-bookworm:bookworm-1.93.0`
-* `paritytech/ci-unified-bookworm:bookworm-1.93.0-v202601271200`
-* `paritytech/ci-unified-bookworm:bookworm-1.93.0-2026-01-27`
-* `paritytech/ci-unified-bookworm:bookworm-1.93.0-2026-01-27-v202601271200`
+* `paritytech/ci-unified:bookworm-1.93.0`
+* `paritytech/ci-unified:bookworm-1.93.0-v202601271200`
+* `paritytech/ci-unified:bookworm-1.93.0-2026-01-27`
+* `paritytech/ci-unified:bookworm-1.93.0-2026-01-27-v202601271200`
 
-Available tags: https://hub.docker.com/r/paritytech/ci-unified-bookworm/tags
+Available tags: https://hub.docker.com/r/paritytech/ci-unified/tags
 
-#### The `latest` tag
+#### The `bookworm` and `latest` tags
 
-As with `ci-unified`, `latest` is an alias for the newest available tag combination, so using it means
-following the upstream in rolling-release style and accepting possible breaking changes.
+`bookworm` is the rolling alias for the newest Debian 12 build — the bookworm counterpart of `latest`,
+with the same rolling-release caveat that it can pick up breaking changes.
+
+`latest` still points at the **bullseye** image and is not published by the bookworm build, so that
+jobs tracking `latest` are not moved onto Debian 12 without opting in. Flipping `latest` to bookworm is
+a deliberate follow-up, to be done once consumers have migrated.

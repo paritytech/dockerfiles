@@ -13,6 +13,11 @@ inputs:
 
   image-name:
     required: true
+  # Defaults to ./<image-name>/Dockerfile. Set this when the source directory does not match the
+  # repository being pushed to, e.g. ci-unified-bookworm/Dockerfile published as ci-unified.
+  containerfile:
+    required: false
+    default: ""
   image-tags:
     required: true
   build-args:
@@ -64,7 +69,7 @@ runs:
         tags: ${{ inputs.image-tags }}
         context: ${{ inputs.context }}
         containerfiles: |
-          ./${{ inputs.image-name }}/Dockerfile
+          ${{ inputs.containerfile != '' && inputs.containerfile || format('./{0}/Dockerfile', inputs.image-name) }}
         build-args: |
           VCS_REF=${{ github.sha }}
           BUILD_DATE=${{ steps.vars.outputs.BUILD_DATE }}

@@ -21,7 +21,10 @@ concurrency:
 env:
   REGISTRY_PATH: "docker.io/paritytech"
   REGISTRY_PATH_PR: "docker.io/paritypr"
-  IMAGE_NAME: "ci-unified-bookworm"
+  # Published into the same repository as the bullseye image; the codename tag prefix separates them.
+  # The Dockerfile lives in ci-unified-bookworm/, passed to the build action as `containerfile`.
+  IMAGE_NAME: "ci-unified"
+  CONTAINERFILE: "./ci-unified-bookworm/Dockerfile"
   RUST_STABLE_VERSION: "1.93.0"
   RUST_NIGHTLY_VERSION: "2026-01-27"
   FORKLIFT_VERSION: "0.17.1"
@@ -54,11 +57,14 @@ jobs:
         with:
           registry: ${{ env.REGISTRY_PATH_PR }}
           image-name: ${{ env.IMAGE_NAME }}
+          containerfile: ${{ env.CONTAINERFILE }}
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           build-opts: "--squash"
+          # No `latest` here: that tag belongs to the bullseye image while both are published to this
+          # repository. `bookworm` is the rolling alias for the newest Debian 12 build.
           image-tags: |
-            ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
             ${{ env.REGISTRY_PATH_PR }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}
@@ -79,15 +85,18 @@ jobs:
         with:
           registry: ${{ env.REGISTRY_PATH }}
           image-name: ${{ env.IMAGE_NAME }}
+          containerfile: ${{ env.CONTAINERFILE }}
           registry-user: ${{ secrets.REGISTRY_USER }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           build-opts: "--squash"
+          # No `latest` here: that tag belongs to the bullseye image while both are published to this
+          # repository. `bookworm` is the rolling alias for the newest Debian 12 build.
           image-tags: |
+            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}
             ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:${{ env.DISTRO_CODENAME }}-${{ env.RUST_STABLE_VERSION }}-${{ env.RUST_NIGHTLY_VERSION }}-v${{ steps.vars.outputs.DATESTAMP }}
-            ${{ env.REGISTRY_PATH }}/${{ env.IMAGE_NAME }}:latest
           build-args: |
             RUST_STABLE_VERSION=${{ env.RUST_STABLE_VERSION }}
             RUST_NIGHTLY_VERSION=${{ env.RUST_NIGHTLY_VERSION }}
