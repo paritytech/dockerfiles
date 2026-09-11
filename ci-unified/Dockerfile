@@ -38,10 +38,19 @@ RUN sed -i "s/REPLACEME/${LLVM_VERSION}/g" /root/.cargo/config && \
 RUN echo '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && \
     chmod +x /usr/local/bin/sudo
 
-# base | bullseye LTS ended on 2026-08-31. The bullseye-security suite is no longer refreshed and its
-# Release file has expired (Valid-Until 2026-09-07), which makes every `apt-get update` fail with
-# "E: Release file ... is expired". Drop the suite; bullseye main and bullseye-updates carry no Valid-Until.
-RUN sed -i '/bullseye-security/d' /etc/apt/sources.list
+# base | bullseye LTS ended on 2026-08-31, so it is being moved off the regular mirrors. Point apt at
+# archive.debian.org, which serves the frozen 11.11 archive (main + bullseye-updates) and is where
+# bullseye lives from now on. bullseye-security is dropped: it is not on archive.debian.org yet, and the
+# copy on security.debian.org is no longer refreshed and its Release file has expired
+# (Valid-Until 2026-09-07), which makes every `apt-get update` fail with "E: Release file ... is expired".
+# http (not https) because ca-certificates is only installed by the apt-get step below.
+# The archived Release files carry no Valid-Until, but keep the check disabled so a future re-signing
+# with a stale Valid-Until cannot break the build again.
+RUN printf '%s\n' \
+    'deb http://archive.debian.org/debian bullseye main' \
+    'deb http://archive.debian.org/debian bullseye-updates main' \
+    > /etc/apt/sources.list && \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until
 
 # base | install tools and dependencies
 RUN set -eux; \
