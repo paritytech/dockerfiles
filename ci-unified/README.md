@@ -5,6 +5,12 @@
 
 This image is used for running CI jobs for Parity repositories. It could also work for you if you're building something on Polkadot SDK.
 
+> [!IMPORTANT]
+> The `bullseye-*` tags described here are based on Debian 11, which reached end of life on
+> 2026-08-31. A Debian 12 revision is published to this same repository under the
+> [`bookworm-*` tags](../ci-unified-bookworm/README.md) — please migrate to those. Both are kept for
+> a while; `bullseye-*` will eventually be retired. Note that `latest` still tracks `bullseye`.
+
 ### Specification
 
 The actual image's revision is based on Debian 11 (aka `bullseye`) and contains the following:
