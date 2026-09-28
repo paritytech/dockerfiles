@@ -28,10 +28,6 @@ inputs:
   build-opts:
     required: false
     default: ""
-  platforms:
-    required: false
-    default: ""
-    description: "Comma-separated platforms, e.g. linux/amd64,linux/arm64. Each tag is then a manifest list over them. Defaults to the runner's architecture."
 
   push:
     required: false
@@ -51,12 +47,6 @@ runs:
       run: |
         sudo apt-get -y update
         sudo apt-get -y install buildah podman
-
-    # Runs the RUN steps of foreign platforms under emulation.
-    - name: Install qemu
-      if: ${{ inputs.platforms != '' }}
-      shell: bash
-      run: sudo apt-get -y install qemu-user-static
 
     - run: mkdir -p /root/.docker/ || true
       shell: bash
@@ -80,7 +70,6 @@ runs:
         image: ${{ inputs.registry }}/${{ inputs.image-name }}
         tags: ${{ inputs.image-tags }}
         context: ${{ inputs.context }}
-        platforms: ${{ inputs.platforms }}
         containerfiles: |
           ${{ inputs.containerfile != '' && inputs.containerfile || format('./{0}/Dockerfile', inputs.image-name) }}
         build-args: |
