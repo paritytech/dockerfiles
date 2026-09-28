@@ -2,50 +2,91 @@ name: base-bin
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]    
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - 'base-bin/*'
       - '.github/workflows/base-bin.yml'
   workflow_dispatch:
 
-env: 
+env:
   REGISTRY_PATH: 'docker.io/paritytech'
   REGISTRY_PATH_PR: 'docker.io/paritypr'
   IMAGE_NAME: 'base-bin'
 
 jobs:
-  Build:
+  set-vars:
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
-    steps: 
-
-    - uses: actions/checkout@v4      
-
-    - name: set vars
+    outputs:
+      registry: ${{ steps.vars.outputs.registry }}
+      build-tag: ${{ steps.vars.outputs.build-tag }}
+      tags: ${{ steps.vars.outputs.tags }}
+    steps:
+    - name: Set vars
       id: vars
       run: |
-        export COMMIT_SHA=${{ github.sha }}
-        echo "IMAGE_DATE_TAG=${COMMIT_SHA:0:8}-$(date +%Y%m%d)" >> $GITHUB_OUTPUT  
+        if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+          date_tag="${GITHUB_SHA:0:8}-$(date +%Y%m%d)"
+          {
+            echo "registry=${REGISTRY_PATH}"
+            echo "build-tag=${date_tag}"
+            echo "tags=${date_tag} latest"
+          } >> "$GITHUB_OUTPUT"
+        else
+          {
+            echo "registry=${REGISTRY_PATH_PR}"
+            echo "build-tag=staging"
+            echo "tags=staging"
+          } >> "$GITHUB_OUTPUT"
+        fi
 
-    - name: build and push staging
-      if: ${{ github.event_name == 'pull_request' }}
+  # Each platform is built natively on its own runner and pushed as <build-tag>-<arch>.
+  build:
+    needs: [ set-vars ]
+    strategy:
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-26.04-arm
+    runs-on: ${{ matrix.runner }}
+    environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
+    steps:
+
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
+
+    - name: build and push ${{ matrix.arch }}
       uses: ./.github/actions/build-push-image
       with:
-        registry: ${{ env.REGISTRY_PATH_PR }}
+        registry: ${{ needs.set-vars.outputs.registry }}
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         image-name: ${{ env.IMAGE_NAME }}
-        image-tags: >
-          staging
+        image-tags: ${{ needs.set-vars.outputs.build-tag }}-${{ matrix.arch }}
 
-    - name: build and push
-      if: ${{ github.event_name == 'workflow_dispatch' }}
-      uses: ./.github/actions/build-push-image
+  # Stitches the per-arch images into the multi-platform tags, in the registry.
+  merge-tags:
+    needs: [ set-vars, build ]
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'workflow_dispatch' && 'main' || null }}
+    steps:
+
+    - name: Log in
+      uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f #v4.6.0
       with:
-        registry: ${{ env.REGISTRY_PATH }}
-        registry-user: ${{ secrets.REGISTRY_USER }}
-        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-        image-name: ${{ env.IMAGE_NAME }}
-        image-tags: >
-          ${{ steps.vars.outputs.IMAGE_DATE_TAG }}
-          latest
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Create multi-platform tags
+      env:
+        IMAGE: ${{ needs.set-vars.outputs.registry }}/${{ env.IMAGE_NAME }}
+        BUILD_TAG: ${{ needs.set-vars.outputs.build-tag }}
+        TAGS: ${{ needs.set-vars.outputs.tags }}
+      run: |
+        # One source per Build matrix leg.
+        sources=("${IMAGE}:${BUILD_TAG}-amd64" "${IMAGE}:${BUILD_TAG}-arm64")
+        for tag in $TAGS; do
+          docker buildx imagetools create --tag "${IMAGE}:${tag}" "${sources[@]}"
+          docker buildx imagetools inspect "${IMAGE}:${tag}"
+          echo "Image pushed to ${IMAGE}:${tag}" >> "$GITHUB_STEP_SUMMARY"
+        done

@@ -1,4 +1,6 @@
 name: "build and push image"
+description: "Build and push an image to a registry"
+
 inputs:
   registry:
     required: true
@@ -53,7 +55,7 @@ runs:
       shell: bash
 
     - name: Log in
-      uses: redhat-actions/podman-login@v1
+      uses: redhat-actions/podman-login@50c2d9a331bb67c8fdab99b86455fad05e2e3252 #v2.0
       with:
         username: ${{ inputs.registry-user }}
         password: ${{ inputs.registry-password }}
@@ -63,7 +65,7 @@ runs:
 
     - name: buildah build
       id: build-image
-      uses: redhat-actions/buildah-build@v2
+      uses: redhat-actions/buildah-build@719e3c40d8af9790c23eca13f7daa339f2867034 #v3.1.0
       with:
         image: ${{ inputs.registry }}/${{ inputs.image-name }}
         tags: ${{ inputs.image-tags }}
@@ -79,14 +81,23 @@ runs:
           --format=docker
           ${{ inputs.build-opts }}
 
+    # needed for push-to-registry v3.0.0
+    - name: Prepare tags
+      id: push-tags
+      if: ${{ inputs.push }}
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.registry }}/${{ inputs.image-name }}
+        TAGS: ${{ steps.build-image.outputs.tags }}
+      run: |
+        echo "tags=$(for tag in $TAGS; do printf '%s:%s ' "$IMAGE" "$tag"; done)" >> $GITHUB_OUTPUT
+
     - name: push
       id: push-image
       if: ${{ inputs.push }}
-      uses: redhat-actions/push-to-registry@v2
+      uses: redhat-actions/push-to-registry@94ade333c38ecc0e60e94785125d9a52ca423b37 #v3.0.0
       with:
-        image: ${{ inputs.image-name }}
-        tags: ${{ steps.build-image.outputs.tags }}
-        registry: ${{ inputs.registry }}
+        tags: ${{ steps.push-tags.outputs.tags }}
 
     - name: Print image url
       shell: bash
