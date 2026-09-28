@@ -1,4 +1,6 @@
 name: "build and push image"
+description: "Build and push an image to a registry"
+
 inputs:
   registry:
     required: true
@@ -26,6 +28,10 @@ inputs:
   build-opts:
     required: false
     default: ""
+  platforms:
+    required: false
+    default: ""
+    description: "Comma-separated platforms, e.g. linux/amd64,linux/arm64. Each tag is then a manifest list over them. Defaults to the runner's architecture."
 
   push:
     required: false
@@ -46,6 +52,12 @@ runs:
         sudo apt-get -y update
         sudo apt-get -y install buildah podman
 
+    # Runs the RUN steps of foreign platforms under emulation.
+    - name: Install qemu
+      if: ${{ inputs.platforms != '' }}
+      shell: bash
+      run: sudo apt-get -y install qemu-user-static
+
     - run: mkdir -p /root/.docker/ || true
       shell: bash
 
@@ -53,7 +65,7 @@ runs:
       shell: bash
 
     - name: Log in
-      uses: redhat-actions/podman-login@v1
+      uses: redhat-actions/podman-login@50c2d9a331bb67c8fdab99b86455fad05e2e3252 #v2.0
       with:
         username: ${{ inputs.registry-user }}
         password: ${{ inputs.registry-password }}
@@ -63,11 +75,12 @@ runs:
 
     - name: buildah build
       id: build-image
-      uses: redhat-actions/buildah-build@v2
+      uses: redhat-actions/buildah-build@719e3c40d8af9790c23eca13f7daa339f2867034 #v3.1.0
       with:
         image: ${{ inputs.registry }}/${{ inputs.image-name }}
         tags: ${{ inputs.image-tags }}
         context: ${{ inputs.context }}
+        platforms: ${{ inputs.platforms }}
         containerfiles: |
           ${{ inputs.containerfile != '' && inputs.containerfile || format('./{0}/Dockerfile', inputs.image-name) }}
         build-args: |
@@ -82,7 +95,7 @@ runs:
     - name: push
       id: push-image
       if: ${{ inputs.push }}
-      uses: redhat-actions/push-to-registry@v2
+      uses: redhat-actions/push-to-registry@94ade333c38ecc0e60e94785125d9a52ca423b37 #v3.0.0
       with:
         image: ${{ inputs.image-name }}
         tags: ${{ steps.build-image.outputs.tags }}
