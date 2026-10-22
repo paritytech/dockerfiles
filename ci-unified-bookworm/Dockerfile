@@ -1,4 +1,4 @@
-FROM docker.io/library/debian:bookworm-20260824-slim
+FROM docker.io/library/debian:bookworm-20261020-slim
 
 
 ### meta ###
