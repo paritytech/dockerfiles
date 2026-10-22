@@ -81,7 +81,15 @@ runs:
           --format=docker
           ${{ inputs.build-opts }}
 
-    # needed for push-to-registry v3.0.0
+    # push-to-registry v3.0.0 dropped the separate image/registry inputs and takes
+    # one full reference per tag, so build the references here.
+    #
+    # buildah-build echoes back whatever shape `image-tags` was given: a caller that
+    # passes a bare tag (base-bin.yml) gets `bookworm` here, one that passes a full
+    # reference (both ci-unified workflows) gets `docker.io/paritytech/ci-unified:bookworm`.
+    # Prefixing unconditionally doubled the name on the latter —
+    # `docker.io/paritytech/ci-unified:docker.io/paritytech/ci-unified:bookworm` —
+    # and every push failed with "invalid reference format".
     - name: Prepare tags
       id: push-tags
       if: ${{ inputs.push }}
@@ -90,7 +98,14 @@ runs:
         IMAGE: ${{ inputs.registry }}/${{ inputs.image-name }}
         TAGS: ${{ steps.build-image.outputs.tags }}
       run: |
-        echo "tags=$(for tag in $TAGS; do printf '%s:%s ' "$IMAGE" "$tag"; done)" >> $GITHUB_OUTPUT
+        out=""
+        for tag in $TAGS; do
+          case "$tag" in
+            "$IMAGE":*) out="$out $tag" ;;
+            *)          out="$out $IMAGE:$tag" ;;
+          esac
+        done
+        echo "tags=${out# }" >> $GITHUB_OUTPUT
 
     - name: push
       id: push-image
