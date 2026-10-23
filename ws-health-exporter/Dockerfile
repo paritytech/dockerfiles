@@ -1,4 +1,6 @@
-FROM docker.io/library/python:3.10.10-slim-bullseye
+# https://github.com/paritytech/devops/issues/5801
+# Not 3.10: those images stopped being rebuilt 2026-10-06 and keep the bad root.
+FROM docker.io/library/python:3.12-slim-trixie
 
 ARG VCS_REF=master
 ARG BUILD_DATE=""
