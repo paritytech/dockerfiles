@@ -3,7 +3,7 @@ FROM docker.io/library/alpine:latest
 ARG VCS_REF=master
 ARG BUILD_DATE=""
 ARG REGISTRY_PATH=docker.io/paritytech
-ARG KUBE_VERSION="1.26.6"
+ARG KUBE_VERSION="1.34.12"
 
 # metadata
 LABEL io.parity.image.authors="devops-team@parity.io" \
@@ -19,9 +19,10 @@ dockerfiles/kubetools/README.md" \
 
 RUN apk add --no-cache \
         ca-certificates git jq make curl gettext bash shadow; \
-    curl -L "https://dl.k8s.io/release/v${KUBE_VERSION}/bin/linux/amd64/kubectl" \
+    curl -fL "https://dl.k8s.io/release/v${KUBE_VERSION}/bin/linux/amd64/kubectl" \
         -o /usr/local/bin/kubectl; \
-    chmod +x /usr/local/bin/kubectl
+    chmod +x /usr/local/bin/kubectl; \
+    kubectl version --client
 
 RUN set -x \
     && groupadd -g 1000 nonroot \

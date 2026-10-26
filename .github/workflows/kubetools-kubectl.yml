@@ -12,7 +12,7 @@ env:
   REGISTRY_PATH: 'docker.io/paritytech'
   REGISTRY_PATH_PR: 'docker.io/paritypr'
   IMAGE_NAME: 'kubetools-kubectl'
-  KUBE_VERSION: '1.26.6'
+  KUBE_VERSION: '1.34.12'
 
 jobs:
   Build:
@@ -26,7 +26,7 @@ jobs:
       id: vars
       run: |
         export COMMIT_SHA=${{ github.sha }}
-        echo "IMAGE_DATE_TAG='${COMMIT_SHA:0:8}-$(date +%Y%m%d)'" >> $GITHUB_OUTPUT  
+        echo "IMAGE_DATE_TAG=${COMMIT_SHA:0:8}-$(date +%Y%m%d)" >> $GITHUB_OUTPUT  
 
     - name: build and push staging
       if: ${{ github.event_name == 'pull_request' }}
@@ -39,7 +39,7 @@ jobs:
         image-tags: >
           staging
         build-args: |
-          KUBE_VERSION='${{ env.KUBE_VERSION }}'
+          KUBE_VERSION=${{ env.KUBE_VERSION }}
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -53,4 +53,4 @@ jobs:
           ${{ env.KUBE_VERSION }}
           latest
         build-args: |
-          KUBE_VERSION='${{ env.KUBE_VERSION }}'
+          KUBE_VERSION=${{ env.KUBE_VERSION }}
