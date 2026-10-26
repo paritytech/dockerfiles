@@ -1,4 +1,4 @@
-FROM docker.io/library/alpine:3.17.2
+FROM docker.io/library/alpine:latest
 
 ARG VCS_REF=master
 ARG BUILD_DATE=""
@@ -16,5 +16,9 @@ dockerfiles/polkadotjs-cli/README.md" \
 	io.parity.image.revision="${VCS_REF}" \
 	io.parity.image.created="${BUILD_DATE}"
 
+ARG API_CLI_VERSION="0.63.21"
+
 RUN apk add --no-cache bash yarn npm jq wget && \
-    yarn global add @polkadot/api-cli
+    yarn global add @polkadot/api-cli@${API_CLI_VERSION} && \
+    command -v polkadot-js-api && \
+    node --version
