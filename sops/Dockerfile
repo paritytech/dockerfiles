@@ -20,15 +20,17 @@ dockerfiles/terraform/README.md" \
 
 RUN apk add --no-cache \
 		ca-certificates git jq make curl gettext bash shadow; \
-	curl -fL "https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux"  \
+	curl -fL "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.amd64" \
 		-o /usr/local/bin/sops; \
-	chmod +x /usr/local/bin/sops
+	chmod +x /usr/local/bin/sops; \
+	sops --version
 
 RUN	curl -fL "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip" \
 		-o vault.zip; \
 	unzip vault.zip	-d /usr/local/bin/vault; \
 	rm vault.zip; \
-	chmod +x /usr/local/bin/vault
+	chmod +x /usr/local/bin/vault; \
+	/usr/local/bin/vault/vault version
 
 RUN set -x \
     && groupadd -g 1000 nonroot \
