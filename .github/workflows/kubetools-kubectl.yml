@@ -7,6 +7,12 @@ on:
       - 'kubetools-kubectl/*'
       - '.github/workflows/kubetools-kubectl.yml'
   workflow_dispatch:
+    inputs:
+      kube_version:
+        description: 'kubectl version to build. Empty uses KUBE_VERSION. `latest` only moves when building KUBE_VERSION.'
+        required: false
+        type: string
+        default: ''
 
 env: 
   REGISTRY_PATH: 'docker.io/paritytech'
@@ -26,7 +32,15 @@ jobs:
       id: vars
       run: |
         export COMMIT_SHA=${{ github.sha }}
-        echo "IMAGE_DATE_TAG=${COMMIT_SHA:0:8}-$(date +%Y%m%d)" >> $GITHUB_OUTPUT  
+        echo "IMAGE_DATE_TAG=${COMMIT_SHA:0:8}-$(date +%Y%m%d)" >> $GITHUB_OUTPUT
+        VERSION='${{ inputs.kube_version }}'
+        [ -z "$VERSION" ] && VERSION="${KUBE_VERSION}"
+        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+        if [ "$VERSION" = "${KUBE_VERSION}" ]; then
+          echo "TAGS=${VERSION} latest" >> $GITHUB_OUTPUT
+        else
+          echo "TAGS=${VERSION}" >> $GITHUB_OUTPUT
+        fi
 
     - name: build and push staging
       if: ${{ github.event_name == 'pull_request' }}
@@ -39,7 +53,7 @@ jobs:
         image-tags: >
           staging
         build-args: |
-          KUBE_VERSION=${{ env.KUBE_VERSION }}
+          KUBE_VERSION=${{ steps.vars.outputs.VERSION }}
 
     - name: build and push
       if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -49,8 +63,6 @@ jobs:
         registry-user: ${{ secrets.REGISTRY_USER }}
         registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         image-name: ${{ env.IMAGE_NAME }}
-        image-tags: >
-          ${{ env.KUBE_VERSION }}
-          latest
+        image-tags: ${{ steps.vars.outputs.TAGS }}
         build-args: |
-          KUBE_VERSION=${{ env.KUBE_VERSION }}
+          KUBE_VERSION=${{ steps.vars.outputs.VERSION }}
